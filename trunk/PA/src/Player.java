@@ -60,9 +60,11 @@ public class Player extends GameObject {
 	
 	public void addEffect(Effect effect) {	
 		effects.add(effect);
+		effect.onSet();
 	}
 	
 	public void removeEffect(Effect effect){
+		effect.onRemove();
 		effects.remove(effect);
 	}
 	
@@ -84,7 +86,7 @@ public class Player extends GameObject {
 		setSpeed(BASE_SPEED);
 		
 		for(Effect eff : effects) {
-			eff.onEffect(this);
+			eff.onEffect();
 		}
 	}
 }
