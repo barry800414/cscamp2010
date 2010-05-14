@@ -26,6 +26,22 @@ public class GameQueue {
 		return queue.poll();
 	}
 	
+	/** Utility method to let scheduling effect addition faster */
+	public void enqueueAddEffect(final Player player, final Effect effect, final int time) {
+		addEvent(new Event() {
+			public int getTime() { return time; }
+			public void action() { player.addEffect(effect); }
+		});
+	}
+	
+	/** Utility method to let scheduling effect removal faster */
+	public void enqueueRemoveEffect(final Player player, final Effect effect, final int time) {
+		addEvent(new Event() {
+			public int getTime() { return time; }
+			public void action() { player.removeEffect(effect); }
+		});
+	}
+	
 	/** Main for self-test */
 	public static void main(String[] args) {
 		GameQueue q = new GameQueue();
