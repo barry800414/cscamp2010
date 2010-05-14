@@ -51,4 +51,17 @@ public class GameObject {
 	public void setSpeed(double v) {
 		speed = v;
 	}
+	
+	public void applyDamage(Damage d) {
+	}
+	
+	/** Test if it is near another object, range is a square. */
+	public boolean near(GameObject other, double range) {
+		double ox = other.getLocX(), oy = other.getLocY();
+		if(ox >= locX - range && ox <= locX + range && oy >= locY - range && oy <= locY + range) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

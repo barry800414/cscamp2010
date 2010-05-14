@@ -47,7 +47,11 @@ public class Player extends GameObject {
 	}
 	
 	public void setSkillQuota(Skill skill, int quota) {
-		skill_quota.put(skill, quota);
+		if(quota > 0) {
+			skill_quota.put(skill, quota);
+		} else {
+			skill_quota.remove(skill);
+		}
 	}
 	
 	public int getSkillQuota(Skill skill) {
@@ -68,6 +72,7 @@ public class Player extends GameObject {
 		effects.remove(effect);
 	}
 	
+	@Override
 	public void applyDamage(Damage damage) {
 		for(Effect eff : effects) {
 			eff.onDamage(damage);

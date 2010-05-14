@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
 public class GameInfo {
+	public static final double FIELD_WIDTH = 800.0, FIELD_HEIGHT = 600.0;
+	
 	private ArrayList<Player> players;
 	private ArrayList<Bullet> bullets;
 	private ArrayList<Animation> animations;
@@ -68,4 +70,26 @@ public class GameInfo {
 	public void removeAnimation(Animation ani) {
 		animations.remove(ani);
 	}
+	
+	/** Get all GameObject near the given origin, excluding itself. */
+	public GameObject[] getNearObjects(GameObject origin, double range) {
+		ArrayList<GameObject> near_obj = new ArrayList<GameObject>();
+		
+		// Check for players
+		for(GameObject obj : players) {
+			if(obj != origin && origin.near(obj, range))
+				near_obj.add(obj);
+		}
+
+		// Check for bullets
+		for(GameObject obj : bullets) {
+			if(obj != origin && origin.near(obj, range))
+				near_obj.add(obj);
+		}
+		
+		return near_obj.toArray(new GameObject[] {});
+	}
+	
+	public double getWidth() { return FIELD_WIDTH; }
+	public double getHeight() { return FIELD_HEIGHT; }
 }

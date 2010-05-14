@@ -115,8 +115,8 @@ class EffectAccelerate extends Effect {
 	}
 }
 
-class EffectSlow extends Effect {
-	public EffectSlow(Game game, Player player) { super(game, player); }
+class EffectSlowdown extends Effect {
+	public EffectSlowdown(Game game, Player player) { super(game, player); }
 	@Override
 	public void onSet() {
 		game.getGameQueue().enqueueRemoveEffect(player, this, game.getTime() + 5000);
