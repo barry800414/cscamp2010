@@ -1,4 +1,6 @@
-
+/**
+ * Skill
+ */
 public enum Skill {
 	Nothing() {
 		public boolean canSetTarget() { return true; }
