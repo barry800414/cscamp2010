@@ -140,4 +140,13 @@ public enum Skill {
 	Skill(boolean targetable) { this.targetable = targetable; }
 	public boolean canSetTarget() { return targetable; }
 	public abstract void use(Game game, Player src, Player target);
+	
+	public static final Skill[] SKILL_LIST = {
+		Nothing,
+		ShieldA, ShieldB, Accelerate, SelfDestroy, ControlBullets,
+		Teleport, CrossKill, Steal, Slowdown, Froze
+	};
+	public static Skill skillFromId(int id) {
+		return (id >= 1 && id <= 10) ? SKILL_LIST[id] : null;
+	}
 }

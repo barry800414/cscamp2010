@@ -4,6 +4,7 @@ public class GameObject {
 
 	protected Game game;
 	protected double locX, locY, dirX, dirY, speed;
+	protected int direct;
 	
 	public GameObject(Game game) {
 		this.game = game;
@@ -25,6 +26,10 @@ public class GameObject {
 		return dirY;
 	}
 	
+	public int getDirect() {
+		return direct;
+	}
+	
 	public double getSpeed() {
 		return speed;
 	}
@@ -40,6 +45,7 @@ public class GameObject {
 		if(length > 0.0) {
 			dirX = x / length;
 			dirY = y / length;
+			// TODO: set this.direct to appropriate value
 		}
 	}
 	
@@ -49,6 +55,7 @@ public class GameObject {
 			double rad = Math.PI * DIRECTION_DEGREE[direct] / 180;
 			dirX = Math.cos(rad);
 			dirY = -Math.sin(rad); // y-coordinate on screen is different
+			this.direct = direct;
 		}
 	}
 	
