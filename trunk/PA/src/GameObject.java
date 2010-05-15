@@ -34,9 +34,13 @@ public class GameObject {
 		locY = y;
 	}
 	
+	/** Set the direction of a game object. Will convert to unit vector. */
 	public void setDir(double x, double y) {
-		dirX = x;
-		dirY = y;
+		double length = Math.sqrt(x*x + y*y);
+		if(length > 0.0) {
+			dirX = x / length;
+			dirY = y / length;
+		}
 	}
 	
 	/** set direction 0~7 */

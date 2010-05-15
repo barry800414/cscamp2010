@@ -1,38 +1,29 @@
-import java.util.Random;
 
-/**
- * Skill
- */
 public enum Skill {
-	Nothing() {
-		public boolean canSetTarget() { return true; }
+	Nothing(true) {
 		public void use(Game game, Player src, Player target) {
 			System.out.println("Used a null skill on " + target + ".");
 		}
 	},
-	ShieldA() {
-		public boolean canSetTarget() { return true; }
+	ShieldA(true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			target.addEffect(new EffectShieldA(game, target));
 		}
 	},
-	ShieldB() {
-		public boolean canSetTarget() { return true; }
+	ShieldB(true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			target.addEffect(new EffectShieldB(game, target));
 		}
 	},
-	Accelerate() {
-		public boolean canSetTarget() { return true; }
+	Accelerate(true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			target.addEffect(new EffectAccelerate(game, target));
 		}
 	},
-	SelfDestroy() {
-		public boolean canSetTarget() { return false; }
+	SelfDestroy(false) {
 		public void use(Game game, Player src, Player target) {
 			GameInfo info = game.getGameInfo();
 			
@@ -46,74 +37,98 @@ public enum Skill {
 			src.applyDamage(Damage.newWithLife(-1));
 		}
 	},
-	ControlBullets() {
-		public boolean canSetTarget() { return true; }
+	ControlBullets(true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
-			GameInfo info = game.getGameInfo();
+			final double MAX_MISS = 20.0;
 			
 			// Set the direction of near bullets to target
-			GameObject[] near_obj = info.getNearObjects(src, 50.0);
-			for(GameObject obj : near_obj) {
+			GameInfo info = game.getGameInfo();
+			GameObject[] near_objs = info.getNearObjects(src, 50.0);
+			for(GameObject obj : near_objs) {
 				if(obj instanceof Bullet) {
 					Bullet bullet = (Bullet)obj;
 					bullet.setOwner(src);
-					bullet.setDirection(target);
+					bullet.setDirection(target, MAX_MISS);
 				}
 			}
 		}
 	},
-	Teleport() {
-		public boolean canSetTarget() { return true; }
+	Teleport(true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
 			GameInfo info = game.getGameInfo();
-			Random rand = new Random();
 			
 			// Teleport!
 			target.setLoc(
-					rand.nextDouble() * info.getWidth(),
-					rand.nextDouble() * info.getHeight()
+					game.random.nextDouble() * info.getWidth(),
+					game.random.nextDouble() * info.getHeight()
 			);
 		}
 	},
-	CrossKill() { // so hard to translate...
-		public boolean canSetTarget() { return true; }
+	CrossKill(true) { // too hard to translate...
+		public void use(Game game, Player src, Player target) {
+			if(target == null) target = src;
+			
+			final double BULLET_SPACING = 10.0;
+			final int NUM_BULLETS = 5;
+			
+			GameInfo info = game.getGameInfo();
+			double x = src.getDirX(), y = src.getDirY();
+			double w = info.getWidth(), h = info.getHeight();
+			
+			// Generates bullets from the far side
+			if(x > w / 2) {
+				// bullets from left
+				for(int i = 0; i < NUM_BULLETS; i++) {
+					info.addBullet(new Bullet(game, (-i * BULLET_SPACING), y, 1.0, 0.0, Bullet.BASE_SPEED, src));
+				}
+			} else {
+				// bullets from right
+				for(int i = 0; i < NUM_BULLETS; i++) {
+					info.addBullet(new Bullet(game, (w + i * BULLET_SPACING), y, -1.0, 0.0, Bullet.BASE_SPEED, src));
+				}
+			}
+			
+			if(y > h / 2) {
+				// bullets from top
+				for(int i = 0; i < NUM_BULLETS; i++) {
+					info.addBullet(new Bullet(game, x, (-i * BULLET_SPACING), 0.0, -1.0, Bullet.BASE_SPEED, src));
+				}
+			} else {
+				// bullets from bottom
+				for(int i = 0; i < NUM_BULLETS; i++) {
+					info.addBullet(new Bullet(game, x, (h + i * BULLET_SPACING), 0.0, 1.0, Bullet.BASE_SPEED, src));
+				}
+			}
+		}
+	},
+	Steal(true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
 			// TODO: implementation
 		}
 	},
-	Steal() {
-		public boolean canSetTarget() { return true; }
-		public void use(Game game, Player src, Player target) {
-			if(target == null) target = src;
-			
-			// TODO: implementation
-		}
-	},
-	Slowdown() {
-		public boolean canSetTarget() { return true; }
+	Slowdown(true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			target.addEffect(new EffectSlowdown(game, target));
 		}
 	},
-	Froze() {
-		public boolean canSetTarget() { return false; }
+	Froze(false) {
 		public void use(Game game, Player src, Player target) {
 			int time_effect_start = game.getTime() + 3000;
 			
-			// Schedule a event to apply frozen effect to all players except itself
+			// Schedule events to apply frozen effect to all players except itself
 			GameQueue queue = game.getGameQueue();
 			GameInfo info = game.getGameInfo();
 			int sz = info.getNumPlayers();
 			
 			for(int i = 0; i < sz; i++) {
-				// Add the corresponding effect
+				// Enqueue the corresponding effect event
 				Player p = info.getPlayer(i);
 				if(p != src)
 					queue.enqueueAddEffect(p, new EffectFrozen(game, p), time_effect_start);
@@ -121,6 +136,8 @@ public enum Skill {
 		}
 	};
 	
-	public abstract boolean canSetTarget();
+	private boolean targetable;
+	Skill(boolean targetable) { this.targetable = targetable; }
+	public boolean canSetTarget() { return targetable; }
 	public abstract void use(Game game, Player src, Player target);
 }
