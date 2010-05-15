@@ -1,5 +1,8 @@
+import java.util.Random;
 
 public class Game {
+	public final Random random = new Random();
+	
 	private GameInfo		info;
 	private GameQueue		queue;
 	private Updater			updater;
