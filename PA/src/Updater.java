@@ -29,6 +29,8 @@ public class Updater {
 	/** Generate first world update event and AI event. */
 	public void init() {
 		last_update = game.getTime();
+		
+		// TODO: Generate first event
 	}
 	
 	/** Update the world and detect collision. */
@@ -42,6 +44,7 @@ public class Updater {
 		
 		movePlayers();
 		moveBullets();
+		detectCollisions();
 		
 		last_update = time_now;
 		enqueueNextUpdate();
