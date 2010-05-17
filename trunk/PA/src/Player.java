@@ -5,6 +5,7 @@ public class Player extends GameObject {
 	public static final double	BASE_SPEED = 70.0;
 	public static final int		BASE_LIFE = 3;
 	
+	private int							id;
 	private int							life;
 	private boolean						silence;
 	private Hashtable<Skill, Integer>	skill_quota;
@@ -14,6 +15,7 @@ public class Player extends GameObject {
 	public Player(Game game) {
 		super(game);
 		
+		id = 0;
 		life = BASE_LIFE;
 		silence = false;
 		skill_quota = new Hashtable<Skill, Integer>();
@@ -21,6 +23,14 @@ public class Player extends GameObject {
 		ai_runner = null;
 		
 		updateStatus();
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int newid) {
+		id = newid;
 	}
 	
 	public int getLife() {
@@ -72,6 +82,10 @@ public class Player extends GameObject {
 	public void removeEffect(Effect effect){
 		effect.onRemove();
 		effects.remove(effect);
+	}
+	
+	public Effect[] getAllEffects() {
+		return effects.toArray(new Effect[0]);
 	}
 	
 	@Override

@@ -30,6 +30,11 @@ public class GameObject {
 		return direct;
 	}
 	
+	public double getDirectRad() {
+		// TODO: returns the correct radius from 0~2pi
+		return 0.0;
+	}
+	
 	public double getSpeed() {
 		return speed;
 	}

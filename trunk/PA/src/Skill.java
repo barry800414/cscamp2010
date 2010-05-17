@@ -1,29 +1,29 @@
 
 public enum Skill {
-	Nothing(true) {
+	Nothing(0, true) {
 		public void use(Game game, Player src, Player target) {
 			System.out.println("Used a null skill on " + target + ".");
 		}
 	},
-	ShieldA(true) {
+	ShieldA(1, true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			target.addEffect(new EffectShieldA(game, target));
 		}
 	},
-	ShieldB(true) {
+	ShieldB(2, true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			target.addEffect(new EffectShieldB(game, target));
 		}
 	},
-	Accelerate(true) {
+	Accelerate(3, true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			target.addEffect(new EffectAccelerate(game, target));
 		}
 	},
-	SelfDestroy(false) {
+	SelfDestroy(4, false) {
 		public void use(Game game, Player src, Player target) {
 			GameInfo info = game.getGameInfo();
 			
@@ -37,7 +37,7 @@ public enum Skill {
 			src.applyDamage(Damage.newWithLife(-1));
 		}
 	},
-	ControlBullets(true) {
+	ControlBullets(5, true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
@@ -55,7 +55,7 @@ public enum Skill {
 			}
 		}
 	},
-	Teleport(true) {
+	Teleport(6, true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
@@ -68,7 +68,7 @@ public enum Skill {
 			);
 		}
 	},
-	CrossKill(true) { // too hard to translate...
+	CrossKill(7, true) { // too hard to translate...
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
@@ -105,20 +105,20 @@ public enum Skill {
 			}
 		}
 	},
-	Steal(true) {
+	Steal(8, true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
 			// TODO: implementation
 		}
 	},
-	Slowdown(true) {
+	Slowdown(9, true) {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			target.addEffect(new EffectSlowdown(game, target));
 		}
 	},
-	Froze(false) {
+	Froze(10, false) {
 		public void use(Game game, Player src, Player target) {
 			long time_effect_start = game.getTime() + 3000;
 			
@@ -136,11 +136,17 @@ public enum Skill {
 		}
 	};
 	
+	private int id;
 	private boolean targetable;
-	Skill(boolean targetable) { this.targetable = targetable; }
+	Skill(int id, boolean targetable) {
+		this.id = id;
+		this.targetable = targetable;
+	}
+	public int getId() { return id; }
 	public boolean canSetTarget() { return targetable; }
 	public abstract void use(Game game, Player src, Player target);
 	
+	public static final int SKILL_ID_MIN = 1, SKILL_ID_MAX = 10;
 	public static final Skill[] SKILL_LIST = {
 		Nothing,
 		ShieldA, ShieldB, Accelerate, SelfDestroy, ControlBullets,

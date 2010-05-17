@@ -101,7 +101,7 @@ public class Updater {
 			// Only run AI if it is finished
 			if(ai != null && runner.isFinished()) {
 				ai.resetInternalState();
-				ai.updateGameInfo(info);
+				ai.updateGameInfo(game, p);
 				// Notify AI if a player used a skill
 				for(Enumeration<Player> e = skill_used_last_ai_update.keys(); e.hasMoreElements(); ) {
 					Player player = e.nextElement();
@@ -139,7 +139,23 @@ public class Updater {
 			AIRunner runner = p.getAIRunner();
 			// Only do AI action if it is finished
 			if(ai != null && runner.isFinished()) {
-				// TODO: do what the ai want, record if used a skill.
+				// Update direction
+				p.setDir(ai.getMove());
+				
+				// Check if using a skill
+				if(ai.isUsingSkill()) {
+					Skill skill = ai.getSkill();
+					if(p.getSkillQuota(skill) > 0) {
+						int target = ai.getTarget() - 1;
+						if(!skill.canSetTarget() || !(target >= 0 && target < info.getNumPlayers())) {
+							target = p.getId();
+						}
+						
+						// Record it and use it
+						skill_used_last_ai_update.put(p, skill);
+						p.useSkill(skill, info.getPlayer(target));
+					}
+				}
 			}
 		}
 		
