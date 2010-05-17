@@ -4,7 +4,7 @@ import java.util.Comparator;
 public class GameQueue {
 	private static Comparator<Event> cmp_event = new Comparator<Event>() {
 		public int compare(Event a, Event b) {
-			int ta = a.getTime(), tb = b.getTime();
+			long ta = a.getTime(), tb = b.getTime();
 			if(ta < tb) return -1;
 			else if(ta > tb) return 1;
 			else return 0;
@@ -27,17 +27,17 @@ public class GameQueue {
 	}
 	
 	/** Utility method to let scheduling effect addition faster */
-	public void enqueueAddEffect(final Player player, final Effect effect, final int time) {
+	public void enqueueAddEffect(final Player player, final Effect effect, final long time) {
 		addEvent(new Event() {
-			public int getTime() { return time; }
+			public long getTime() { return time; }
 			public void action() { player.addEffect(effect); }
 		});
 	}
 	
 	/** Utility method to let scheduling effect removal faster */
-	public void enqueueRemoveEffect(final Player player, final Effect effect, final int time) {
+	public void enqueueRemoveEffect(final Player player, final Effect effect, final long time) {
 		addEvent(new Event() {
-			public int getTime() { return time; }
+			public long getTime() { return time; }
 			public void action() { player.removeEffect(effect); }
 		});
 	}
@@ -47,15 +47,15 @@ public class GameQueue {
 		GameQueue q = new GameQueue();
 		Event[] ev = {
 				new Event() {
-					public int getTime() { return 100; }
+					public long getTime() { return 100; }
 					public void action() { System.out.println("A100"); }
 				},
 				new Event() {
-					public int getTime() { return 9000; }
+					public long getTime() { return 9000; }
 					public void action() { System.out.println("B9000"); }
 				},
 				new Event() {
-					public int getTime() { return -1; }
+					public long getTime() { return -1; }
 					public void action() { System.out.println("C-1"); }
 				}
 		};

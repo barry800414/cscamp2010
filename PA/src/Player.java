@@ -9,6 +9,7 @@ public class Player extends GameObject {
 	private boolean						silence;
 	private Hashtable<Skill, Integer>	skill_quota;
 	private ArrayList<Effect>			effects;
+	private AIRunner					ai_runner;
 	
 	public Player(Game game) {
 		super(game);
@@ -17,6 +18,7 @@ public class Player extends GameObject {
 		silence = false;
 		skill_quota = new Hashtable<Skill, Integer>();
 		effects = new ArrayList<Effect>();
+		ai_runner = null;
 		
 		updateStatus();
 	}
@@ -92,6 +94,38 @@ public class Player extends GameObject {
 		
 		for(Effect eff : effects) {
 			eff.onEffect();
+		}
+	}
+	
+	/** Returns assigned AI, null if not exist. */
+	public AI getAI() {
+		return (ai_runner != null) ? ai_runner.getAIInstance() : null;
+	}
+	
+	/** Returns the AIRunner, null if not exist. */
+	public AIRunner getAIRunner() {
+		return ai_runner;
+	}
+	
+	/** Assigns a AI to player, null to remove. */
+	public void setAI(AI ai) {
+		killAI();
+		if(ai != null) {
+			this.ai_runner = new AIRunner(ai);
+		}
+	}
+	
+	public void setAI(AIRunner runner) {
+		killAI();
+		this.ai_runner = runner;
+	}
+	
+	/** Kill the AI runner */
+	public void killAI() {
+		// Stop and kill the AIRunner if exist
+		if(ai_runner != null) {
+			ai_runner.stop();
+			ai_runner = null;
 		}
 	}
 }

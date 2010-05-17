@@ -6,7 +6,7 @@
  */
 public interface Event {
 	/** The time in millisecond after game starts that this event should happen */
-	int getTime();
+	long getTime();
 	
 	/** What should the event do */
 	void action();
