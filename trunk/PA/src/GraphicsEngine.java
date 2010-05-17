@@ -6,6 +6,9 @@ public class GraphicsEngine {
 		this.game = game;
 	}
 	
+	public void init() {
+	}
+	
 	public void draw() {
 	}
 }

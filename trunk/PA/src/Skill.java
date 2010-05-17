@@ -120,7 +120,7 @@ public enum Skill {
 	},
 	Froze(false) {
 		public void use(Game game, Player src, Player target) {
-			int time_effect_start = game.getTime() + 3000;
+			long time_effect_start = game.getTime() + 3000;
 			
 			// Schedule events to apply frozen effect to all players except itself
 			GameQueue queue = game.getGameQueue();

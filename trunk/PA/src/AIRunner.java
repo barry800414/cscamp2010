@@ -23,6 +23,16 @@ public class AIRunner {
 		}
 	}
 	
+	/** Init with a AI instance */
+	public AIRunner(AI ai) {
+		if(ai != null) {
+			this.classname = ai.getClass().toString();
+			this.ai_instance = ai;
+		} else {
+			throw new NullPointerException();
+		}
+	}
+	
 	/** Get the instance of the AI */
 	public AI getAIInstance() {
 		return ai_instance;
