@@ -51,17 +51,13 @@ public class Updater {
 	}
 	
 	private void movePlayers() {
-		int num_players = info.getNumPlayers();
-		for(int i = 0; i < num_players; i++) {
-			Player p = info.getPlayer(i);
+		for(Player p : info.getAllPlayers()) {
 			moveGameObject(p);
 		}
 	}
 	
 	private void moveBullets() {
-		int num_bullets = info.getNumBullets();
-		for(int i = 0; i < num_bullets; i++) {
-			Bullet b = info.getBullet(i);
+		for(Bullet b : info.getAllBullets()) {
 			moveGameObject(b);
 		}
 	}
@@ -93,15 +89,14 @@ public class Updater {
 		final long time_to_update = game.getTime() + UPDATE_AI_PERIOD;
 		
 		// Update all AI state
-		int num_players = info.getNumPlayers();
-		for(int i = 0; i < num_players; i++) {
-			Player p = info.getPlayer(i);
+		for(Player p : info.getAllPlayers()) {
 			AI ai = p.getAI();
 			AIRunner runner = p.getAIRunner();
 			// Only run AI if it is finished
 			if(ai != null && runner.isFinished()) {
 				ai.resetInternalState();
 				ai.updateGameInfo(game, p);
+				
 				// Notify AI if a player used a skill
 				for(Enumeration<Player> e = skill_used_last_ai_update.keys(); e.hasMoreElements(); ) {
 					Player player = e.nextElement();
@@ -110,6 +105,7 @@ public class Updater {
 						ai.onPlayerSkillUsage(player, skill);
 					}
 				}
+				
 				// Run AI
 				runner.run();
 			}
@@ -132,9 +128,7 @@ public class Updater {
 	 */
 	public void updateAI() {
 		// Update all AI state
-		int num_players = info.getNumPlayers();
-		for(int i = 0; i < num_players; i++) {
-			Player p = info.getPlayer(i);
+		for(Player p : info.getAllPlayers()) {
 			AI ai = p.getAI();
 			AIRunner runner = p.getAIRunner();
 			// Only do AI action if it is finished

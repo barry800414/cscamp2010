@@ -40,6 +40,10 @@ public class GameInfo {
 	public Player getPlayerFromId(int id) {
 		return hash_id_player.get(id);
 	}
+	
+	public Player[] getAllPlayers() {
+		return players.toArray(new Player[0]);
+	}
 
 	public Bullet getBullet(int index) {
 		if(index >= 0 && index < getNumBullets())
@@ -48,6 +52,10 @@ public class GameInfo {
 			return null;
 	}
 
+	public Bullet[] getAllBullets() {
+		return bullets.toArray(new Bullet[0]);
+	}
+	
 	public Animation getAnimation(int index) {
 		if(index >= 0 && index < getNumAnimations())
 			return animations.get(index);

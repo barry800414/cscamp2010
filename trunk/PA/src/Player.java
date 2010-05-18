@@ -1,5 +1,6 @@
 import java.util.Hashtable;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Player extends GameObject {
 	public static final double	BASE_SPEED = 70.0;
@@ -50,8 +51,9 @@ public class Player extends GameObject {
 			int quota = getSkillQuota(skill);
 			if(quota > 0) {
 				if(!skill.canSetTarget()) target = this;
-				skill.use(game, this, target);
+				// Do quota change before using skill
 				setSkillQuota(skill, quota - 1);
+				skill.use(game, this, target);
 			} else {
 				System.out.println("Player: " + this + " don't have skill " + skill + ".");
 			}
@@ -59,6 +61,7 @@ public class Player extends GameObject {
 	}
 	
 	public void setSkillQuota(Skill skill, int quota) {
+		/* The key in the hashtable must be removed if (quota == 0). */
 		if(quota > 0) {
 			skill_quota.put(skill, quota);
 		} else {
@@ -72,6 +75,12 @@ public class Player extends GameObject {
 			return 0;
 		else
 			return quota.intValue();
+	}
+	
+	/** Get all skills that the player owns in an array */
+	public Skill[] getAllSkills() {
+		Set<Skill> skills = skill_quota.keySet();
+		return skills.toArray(new Skill[0]);
 	}
 	
 	public void addEffect(Effect effect) {	
