@@ -146,14 +146,14 @@ public class Updater {
 				if(ai.isUsingSkill()) {
 					Skill skill = ai.getSkill();
 					if(p.getSkillQuota(skill) > 0) {
-						int target = ai.getTarget() - 1;
-						if(!skill.canSetTarget() || !(target >= 0 && target < info.getNumPlayers())) {
-							target = p.getId();
+						Player target = info.getPlayerFromId(ai.getTarget());
+						if(!skill.canSetTarget() || target == null) {
+							target = p;
 						}
 						
 						// Record it and use it
 						skill_used_last_ai_update.put(p, skill);
-						p.useSkill(skill, info.getPlayer(target));
+						p.useSkill(skill, target);
 					}
 				}
 			}

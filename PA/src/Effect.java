@@ -4,6 +4,14 @@
  * The effect may generate game events.
  */
 public class Effect {
+	public static final int	EFFECT_NOTHING = 0,
+							EFFECT_FROZEN = 10,
+							EFFECT_SHIELDA = 1,
+							EFFECT_SHIELDB = 2,
+							EFFECT_ACCELERATE = 3,
+							EFFECT_SLOWDOWN = 9,
+							EFFECT_UNVULNERABLE = 11;
+	
 	protected Game game;
 	protected Player player;
 	
@@ -13,7 +21,7 @@ public class Effect {
 	}
 	
 	/** Each type of effect should have a unique id */
-	public int getId() { return 0; }
+	public int getId() { return EFFECT_NOTHING; }
 	
 	/** Called when set to a player */
 	public void onSet() {}
@@ -40,7 +48,7 @@ public class Effect {
  */
 class EffectNothing extends Effect {
 	public EffectNothing(Game game, Player player) { super(game, player); }
-	@Override public int getId() { return 0; }
+	@Override public int getId() { return EFFECT_NOTHING; }
 	@Override
 	public void onSet() {
 		System.out.println("EffectNothing: onSet()");
@@ -64,7 +72,7 @@ class EffectNothing extends Effect {
  */
 class EffectFrozen extends Effect {
 	public EffectFrozen(Game game, Player player) { super(game, player); }
-	@Override public int getId() { return 10; }
+	@Override public int getId() { return EFFECT_FROZEN; }
 	@Override
 	public void onSet() {
 		game.getGameQueue().enqueueRemoveEffect(player, this, game.getTime() + 3000);
@@ -77,7 +85,7 @@ class EffectFrozen extends Effect {
 
 class EffectShieldA extends Effect {
 	public EffectShieldA(Game game, Player player) { super(game, player); }
-	@Override public int getId() { return 1; }
+	@Override public int getId() { return EFFECT_SHIELDA; }
 	@Override
 	public void onSet() {
 		game.getGameQueue().enqueueRemoveEffect(player, this, game.getTime() + 5000);
@@ -91,7 +99,7 @@ class EffectShieldA extends Effect {
 class EffectShieldB extends Effect {
 	private int prevent_damage = 5;
 	public EffectShieldB(Game game, Player player) { super(game, player); }
-	@Override public int getId() { return 2; }
+	@Override public int getId() { return EFFECT_SHIELDB; }
 	@Override
 	public void onSet() {
 		game.getGameQueue().enqueueRemoveEffect(player, this, game.getTime() + 5000);
@@ -112,7 +120,7 @@ class EffectShieldB extends Effect {
 
 class EffectAccelerate extends Effect {
 	public EffectAccelerate(Game game, Player player) { super(game, player); }
-	@Override public int getId() { return 3; }
+	@Override public int getId() { return EFFECT_ACCELERATE; }
 	@Override
 	public void onSet() {
 		game.getGameQueue().enqueueRemoveEffect(player, this, game.getTime() + 10000);
@@ -125,7 +133,7 @@ class EffectAccelerate extends Effect {
 
 class EffectSlowdown extends Effect {
 	public EffectSlowdown(Game game, Player player) { super(game, player); }
-	@Override public int getId() { return 9; }
+	@Override public int getId() { return EFFECT_SLOWDOWN; }
 	@Override
 	public void onSet() {
 		game.getGameQueue().enqueueRemoveEffect(player, this, game.getTime() + 5000);
@@ -133,5 +141,18 @@ class EffectSlowdown extends Effect {
 	@Override
 	public void onEffect() {
 		player.setSpeed(player.getSpeed() * 0.5);
+	}
+}
+
+class EffectUnvulnerable extends Effect {
+	public EffectUnvulnerable(Game game, Player player) { super(game, player); }
+	@Override public int getId() { return EFFECT_UNVULNERABLE; }
+	@Override
+	public void onSet() {
+		game.getGameQueue().enqueueRemoveEffect(player, this, game.getTime() + 1000);
+	}
+	@Override
+	public void onDamage(Damage d) {
+		if(d.life < 0) d.life = 0;
 	}
 }
