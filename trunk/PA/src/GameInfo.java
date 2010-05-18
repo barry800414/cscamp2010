@@ -1,15 +1,18 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class GameInfo {
 	public static final double FIELD_WIDTH = 800.0, FIELD_HEIGHT = 600.0;
 	
 	private ArrayList<Player> players;
+	private Hashtable<Integer, Player> hash_id_player;
 	private ArrayList<Bullet> bullets;
 	private ArrayList<Animation> animations;
 	
 	/** Constructor */
 	public GameInfo() {
 		players = new ArrayList<Player>();
+		hash_id_player = new Hashtable<Integer, Player>();
 		bullets = new ArrayList<Bullet>();
 		animations = new ArrayList<Animation>();
 	}
@@ -32,6 +35,11 @@ public class GameInfo {
 		else
 			return null;
 	}
+	
+	/** Get player according to its id, null if not found. */
+	public Player getPlayerFromId(int id) {
+		return hash_id_player.get(id);
+	}
 
 	public Bullet getBullet(int index) {
 		if(index >= 0 && index < getNumBullets())
@@ -49,6 +57,7 @@ public class GameInfo {
 	
 	public void addPlayer(Player p) {
 		players.add(p);
+		hash_id_player.put(p.getId(), p);
 	}
 
 	public void addBullet(Bullet b) {
@@ -61,6 +70,7 @@ public class GameInfo {
 	
 	public void removePlayer(Player p) {
 		players.remove(p);
+		hash_id_player.remove(p.getId());
 	}
 	
 	public void removeBullet(Bullet b) {
