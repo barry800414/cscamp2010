@@ -109,7 +109,31 @@ public enum Skill {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
-			// TODO: implementation
+			Skill[] skills = target.getAllSkills();
+			Skill skill;
+			if(skills.length == 0) {
+				return;
+			} else if(skills.length == 1 && skills[0] == Skill.Steal) {
+				return;
+			} else {
+				int index;
+				do {
+					index = game.random.nextInt(skills.length);
+					skill = skills[index];
+				} while(skill == Skill.Steal);
+				
+				// Determine the skill target
+				Player skill_target = src;
+				if(skill.canSetTarget()) {
+					// Randomly set the target
+					Player[] players = game.getGameInfo().getAllPlayers();
+					skill_target = players[game.random.nextInt(players.length)];
+				}
+				
+				// Update the skill quota before using it
+				target.setSkillQuota(skill, target.getSkillQuota(skill) - 1);
+				skill.use(game, src, skill_target);
+			}
 		}
 	},
 	Slowdown(9, true) {

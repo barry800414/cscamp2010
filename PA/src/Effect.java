@@ -101,10 +101,6 @@ class EffectShieldB extends Effect {
 	public EffectShieldB(Game game, Player player) { super(game, player); }
 	@Override public int getId() { return EFFECT_SHIELDB; }
 	@Override
-	public void onSet() {
-		game.getGameQueue().enqueueRemoveEffect(player, this, game.getTime() + 5000);
-	}
-	@Override
 	public void onDamage(Damage d) {
 		if(-d.life > prevent_damage) {
 			d.life += prevent_damage;
