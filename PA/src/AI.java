@@ -1,6 +1,10 @@
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 
 public abstract class AI {
-	private AIPlayer[] players;
+	/** Contract: If we have 4 players, the id must be 1 to 4. */
+	private Hashtable<Integer, AIPlayer> players = new Hashtable<Integer, AIPlayer>();
 	private AIBullet[] bullets;
 	private int[] skill_quota;
 	private long time;
@@ -11,7 +15,7 @@ public abstract class AI {
 	private int target;
 	
 	public final void resetInternalState() {
-		players = null;
+		players.clear();
 		bullets = null;
 		skill_quota = null;
 		
@@ -31,10 +35,8 @@ public abstract class AI {
 		}
 		
 		// Set players data
-		int num_players = info.getNumPlayers();
-		players = new AIPlayer[num_players];
-		for(int i = 0; i < num_players; i++) {
-			players[i] = new AIPlayer(info.getPlayer(i));
+		for(Player p : info.getAllPlayers()) {
+			players.put(p.getId(), new AIPlayer(p));
 		}
 		
 		// Set bullets data
@@ -46,8 +48,10 @@ public abstract class AI {
 	}
 	
 	public final void onPlayerSkillUsage(Player p, Skill skill) {
-		for(AIPlayer ai_player : players)
+		for(Enumeration<Integer> e = players.keys(); e.hasMoreElements(); ) {
+			AIPlayer ai_player = players.get(e.nextElement());
 			if(ai_player != null) ai_player.onPlayerSkillUsage(p, skill);
+		}
 	}
 	
 	public final int getMove() {
@@ -69,12 +73,12 @@ public abstract class AI {
 	/* API for AI */
 	
 	public final int getNumPlayers() {
-		return players.length;
+		return players.size();
 	}
 	
 	public final AIPlayer getPlayer(int id) {
-		if(id >= 0 && id < players.length)
-			return players[id];
+		if(id >= 1 && id <= players.size())
+			return players.get(id);
 		else
 			return null;
 	}
