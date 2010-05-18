@@ -83,12 +83,12 @@ public class Player extends GameObject {
 		return skills.toArray(new Skill[0]);
 	}
 	
-	public void addEffect(Effect effect) {	
+	public void addEffect(Effect effect) {
 		effects.add(effect);
 		effect.onSet();
 	}
 	
-	public void removeEffect(Effect effect){
+	public void removeEffect(Effect effect) {
 		effect.onRemove();
 		effects.remove(effect);
 	}
