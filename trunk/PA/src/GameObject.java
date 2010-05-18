@@ -30,9 +30,14 @@ public class GameObject {
 		return direct;
 	}
 	
-	public double getDirectRad() {
-		// TODO: returns the correct radius from 0~2pi
-		return 0.0;
+	/** Returns the correct radius from 0~2pi */
+	public double getDirectRad() { 
+		if(dirX == 0.0) {
+			// don't care if (speed == 0)
+			return Math.PI / 2 * ((dirY > 0.0) ? 3 : 1);
+		} else {
+			return Math.atan2(-dirY, dirX) + Math.PI;
+		}
 	}
 	
 	public double getSpeed() {
@@ -50,7 +55,9 @@ public class GameObject {
 		if(length > 0.0) {
 			dirX = x / length;
 			dirY = y / length;
-			// TODO: set this.direct to appropriate value
+			
+			// Set this.direct to appropriate value
+			direct = (int)Math.round((getDirectRad() * 180 / Math.PI) / (360 / 8));
 		}
 	}
 	

@@ -30,7 +30,9 @@ public class Updater {
 	public void init() {
 		last_update = game.getTime();
 		
-		// TODO: Generate first event
+		// Generate initial events
+		update();
+		decideAI();
 	}
 	
 	/** Update the world and detect collision. */
