@@ -65,7 +65,7 @@ public class Game {
 					queue.getNext().action();
 				} else {
 					try {
-						Thread.sleep(ev.getTime() - getTime());
+						Thread.sleep(time_delta);
 					} catch(InterruptedException e) {
 						// End of the world
 						return;
