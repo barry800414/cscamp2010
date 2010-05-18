@@ -8,7 +8,9 @@ import java.util.Hashtable;
  * Controls AI: threads, etc.
  */
 public class Updater {
-	public static final long UPDATE_PERIOD = 50;
+	/** The time in millisecond that the world should update. */
+	public static final long UPDATE_PERIOD = 1000 / 60;
+	/** The time in millisecond that AI should make decision. */
 	public static final long UPDATE_AI_PERIOD = 100;
 	
 	private Game game;
@@ -54,6 +56,7 @@ public class Updater {
 	
 	private void movePlayers() {
 		for(Player p : info.getAllPlayers()) {
+			p.updateStatus();
 			moveGameObject(p);
 		}
 	}
@@ -70,7 +73,7 @@ public class Updater {
 	
 	private void moveGameObject(GameObject obj) {
 		double length = obj.getSpeed() * since_last_update / 1000;
-		obj.setLoc(obj.getDirX() + obj.getDirX() * length, obj.getDirY() + obj.getDirY() * length);
+		obj.setLoc(obj.getLocX() + obj.getDirX() * length, obj.getLocY() + obj.getDirY() * length);
 	}
 	
 	private void enqueueNextUpdate() {
