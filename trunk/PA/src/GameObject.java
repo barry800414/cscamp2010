@@ -1,6 +1,7 @@
 
 public class GameObject {
-	public static final double[] DIRECTION_DEGREE = {0, 45, 90, 135, 180, 225, 270, 315};
+	public static final double SPEED_CORRECTION = 2.0;
+	public static final double[] DIRECTION_DEGREE = {0, 0, 45, 90, 135, 180, 225, 270, 315};
 
 	protected Game game;
 	protected double locX, locY, dirX, dirY, speed;
@@ -57,13 +58,21 @@ public class GameObject {
 			dirY = y / length;
 			
 			// Set this.direct to appropriate value
-			direct = (int)Math.round((getDirectRad() * 180 / Math.PI) / (360 / 8));
+			direct = 1 + (int)Math.round((getDirectRad() * 180 / Math.PI) / (360 / 8));
+		} else {
+			dirX = 0.0;
+			dirY = 0.0;
+			direct = 0;
 		}
 	}
 	
-	/** set direction 0~7 */
+	/** set direction 0~8: 0(stop), 1-8(0-2pi). */
 	public void setDir(int direct) {
-		if(direct >= 0 && direct <= 7) {
+		if(direct == 0) {
+			this.direct = 0;
+			setDir(0.0, 0.0);
+		}
+		else if(direct >= 1 && direct <= 8) {
 			double rad = Math.PI * DIRECTION_DEGREE[direct] / 180;
 			dirX = Math.cos(rad);
 			dirY = -Math.sin(rad); // y-coordinate on screen is different
@@ -72,7 +81,7 @@ public class GameObject {
 	}
 	
 	public void setSpeed(double v) {
-		speed = v;
+		speed = v * SPEED_CORRECTION;
 	}
 	
 	public void applyDamage(Damage d) {

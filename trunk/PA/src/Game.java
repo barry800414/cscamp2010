@@ -38,6 +38,10 @@ public class Game {
 		return queue;
 	}
 	
+	public GraphicsEngine getGraphicsEngine() {
+		return gengine;
+	}
+	
 	/** This method does the init of all components, and run the main loop. */
 	public void startGame() {
 		time_game_start = Calendar.getInstance().getTimeInMillis();
@@ -111,8 +115,13 @@ public class Game {
 		
 		final Player p = new Player(g);
 		p.setLoc(0.0, 300.0);
-		p.setDir(0);
+		p.setDir(1);
 		p.setId(1);
+		p.setName("Human player");
+		for(int i = 1; i <= 10; i++) {
+			p.setSkillQuota(Skill.skillFromId(i), 1);
+		}
+		p.setAI(new AIHuman(g));
 
 		final Effect eff = new EffectFrozen(g, p);
 		final long time_eff = 5000;

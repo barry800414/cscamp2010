@@ -72,35 +72,36 @@ public enum Skill {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
-			final double BULLET_SPACING = 10.0;
+			final double BULLET_SPACING = 30.0;
 			final int NUM_BULLETS = 5;
+			final double BULLET_SPEED = 100.0;
 			
 			GameInfo info = game.getGameInfo();
-			double x = src.getDirX(), y = src.getDirY();
+			double x = src.getLocX(), y = src.getLocY();
 			double w = info.getWidth(), h = info.getHeight();
 			
 			// Generates bullets from the far side
 			if(x > w / 2) {
 				// bullets from left
 				for(int i = 0; i < NUM_BULLETS; i++) {
-					info.addBullet(new Bullet(game, (-i * BULLET_SPACING), y, 1.0, 0.0, Bullet.BASE_SPEED, src));
+					info.addBullet(new Bullet(game, (-i * BULLET_SPACING), y, 1.0, 0.0, BULLET_SPEED, src));
 				}
 			} else {
 				// bullets from right
 				for(int i = 0; i < NUM_BULLETS; i++) {
-					info.addBullet(new Bullet(game, (w + i * BULLET_SPACING), y, -1.0, 0.0, Bullet.BASE_SPEED, src));
+					info.addBullet(new Bullet(game, (w + i * BULLET_SPACING), y, -1.0, 0.0, BULLET_SPEED, src));
 				}
 			}
 			
 			if(y > h / 2) {
 				// bullets from top
 				for(int i = 0; i < NUM_BULLETS; i++) {
-					info.addBullet(new Bullet(game, x, (-i * BULLET_SPACING), 0.0, -1.0, Bullet.BASE_SPEED, src));
+					info.addBullet(new Bullet(game, x, (-i * BULLET_SPACING), 0.0, 1.0, BULLET_SPEED, src));
 				}
 			} else {
 				// bullets from bottom
 				for(int i = 0; i < NUM_BULLETS; i++) {
-					info.addBullet(new Bullet(game, x, (h + i * BULLET_SPACING), 0.0, 1.0, Bullet.BASE_SPEED, src));
+					info.addBullet(new Bullet(game, x, (h + i * BULLET_SPACING), 0.0, -1.0, BULLET_SPEED, src));
 				}
 			}
 		}

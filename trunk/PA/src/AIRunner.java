@@ -7,7 +7,7 @@ public class AIRunner {
 	private String classname;
 	private AI ai_instance;
 	private Thread ai_thread;
-	private boolean finished;
+	private boolean finished = true;
 	
 	/** Init with class name */
 	public AIRunner(String classname) {

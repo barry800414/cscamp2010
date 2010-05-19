@@ -7,6 +7,7 @@ public class Player extends GameObject {
 	public static final int		BASE_LIFE = 3;
 	
 	private int							id;
+	private String						name;
 	private int							life;
 	private boolean						silence;
 	private Hashtable<Skill, Integer>	skill_quota;
@@ -34,6 +35,14 @@ public class Player extends GameObject {
 		id = newid;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
 	public int getLife() {
 		return life;
 	}
@@ -54,6 +63,8 @@ public class Player extends GameObject {
 				// Do quota change before using skill
 				setSkillQuota(skill, quota - 1);
 				skill.use(game, this, target);
+				
+				System.out.println("Player [" + this + "] used skill " + skill + " on player [" + target + "].");
 			} else {
 				System.out.println("Player: " + this + " don't have skill " + skill + ".");
 			}
@@ -84,11 +95,13 @@ public class Player extends GameObject {
 	}
 	
 	public void addEffect(Effect effect) {
+		System.out.println("Player [" + this + "]: effect [" + effect + "] onSet");
 		effects.add(effect);
 		effect.onSet();
 	}
 	
 	public void removeEffect(Effect effect) {
+		System.out.println("Player [" + this + "]: effect [" + effect + "] onRemove");
 		effect.onRemove();
 		effects.remove(effect);
 	}
