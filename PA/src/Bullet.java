@@ -34,10 +34,10 @@ public class Bullet extends GameObject {
 	
 	/** Set the bullet to target a game object with little miss (change direction once). */
 	public void setDirection(GameObject target, double miss) {
-		double x = target.getDirX(), y = target.getDirY();
+		double x = target.getLocX(), y = target.getLocY();
 		setDir(
-				x - getDirX() + 2*(game.random.nextDouble() - 0.5)*miss,
-				y - getDirY() + 2*(game.random.nextDouble() - 0.5)*miss
+				x - getLocX() + 2*(game.random.nextDouble() - 0.5)*miss,
+				y - getLocY() + 2*(game.random.nextDouble() - 0.5)*miss
 		);
 	}
 	

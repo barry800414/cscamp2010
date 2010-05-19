@@ -3,6 +3,8 @@ import java.util.Hashtable;
 
 
 public abstract class AI {
+	public int myId;
+	
 	/** Contract: If we have 4 players, the id must be 1 to 4. */
 	private Hashtable<Integer, AIPlayer> players = new Hashtable<Integer, AIPlayer>();
 	private AIBullet[] bullets;
@@ -27,6 +29,9 @@ public abstract class AI {
 	public final void updateGameInfo(Game game, Player self_player) {
 		GameInfo info = game.getGameInfo();
 		time = game.getTime();
+		
+		// set myId
+		myId = self_player.getId();
 		
 		// Set self data
 		skill_quota = new int[Skill.SKILL_ID_MAX + 1];

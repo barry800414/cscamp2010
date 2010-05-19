@@ -95,4 +95,8 @@ public class GraphicsEngine {
 			public void action() { ge.draw(); }
 		});
 	}
+	
+	public JFrame getMainFrame() {
+		return main_scr;
+	}
 }
