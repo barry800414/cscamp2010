@@ -12,6 +12,7 @@ public class Updater {
 	public static final long UPDATE_PERIOD = 1000 / 60;
 	/** The time in millisecond that AI should make decision. */
 	public static final long UPDATE_AI_PERIOD = 100;
+	public static final double SPEED_CORRECTION = 2.0;
 	
 	private Game game;
 	private GameInfo info;
@@ -72,7 +73,7 @@ public class Updater {
 	}
 	
 	private void moveGameObject(GameObject obj) {
-		double length = obj.getSpeed() * since_last_update / 1000;
+		double length = SPEED_CORRECTION * obj.getSpeed() * since_last_update / 1000;
 		obj.setLoc(obj.getLocX() + obj.getDirX() * length, obj.getLocY() + obj.getDirY() * length);
 	}
 	

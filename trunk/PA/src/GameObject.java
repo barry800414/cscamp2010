@@ -1,6 +1,5 @@
 
 public class GameObject {
-	public static final double SPEED_CORRECTION = 2.0;
 	public static final double[] DIRECTION_DEGREE = {0, 0, 45, 90, 135, 180, 225, 270, 315};
 
 	protected Game game;
@@ -81,7 +80,7 @@ public class GameObject {
 	}
 	
 	public void setSpeed(double v) {
-		speed = v * SPEED_CORRECTION;
+		speed = v;
 	}
 	
 	public void applyDamage(Damage d) {
