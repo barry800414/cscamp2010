@@ -20,6 +20,8 @@ public class Game {
 	
 	private long			time_game_start;
 	
+	private Event			curr_event;
+	
 	/** Initializer */
 	public Game() {
 		info = new GameInfo();
@@ -52,6 +54,22 @@ public class Game {
 		return Calendar.getInstance().getTimeInMillis() - time_game_start;
 	}
 	
+	/** Get the current event, null if first event. */
+	public Event getCurrentEvent() {
+		return curr_event;
+	}
+	
+	/**
+	 * Get the current event time, returns getTime() if not exist a current event.
+	 * This method is designed for time-sensitive repeating events. 
+	 */
+	public long getCurrentEventTime() {
+		if(curr_event != null)
+			return curr_event.getTime();
+		else
+			return getTime();
+	}
+	
 	/**
 	 * The main loop of the game:
 	 * get the next event in the queue and fire it at correct time.
@@ -68,7 +86,9 @@ public class Game {
 						System.out.println("Game: QoS, event late: " + time_delta);
 					}
 					// Dequeue the event and fire it
-					queue.getNext().action();
+					curr_event = queue.getNext();
+					curr_event.action();
+					curr_event = null;
 				} else {
 					try {
 						Thread.sleep(time_delta);

@@ -39,7 +39,7 @@ public class GraphicsEngine {
 	}
 	
 	public void draw() {
-		long time_now = game.getTime();
+		long time_now = game.getCurrentEventTime();
 		
 		// Get the graphics buffer
 		Graphics g = buffer.getDrawGraphics();
