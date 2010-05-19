@@ -136,7 +136,7 @@ class EffectSlowdown extends Effect {
 	}
 	@Override
 	public void onEffect() {
-		player.setSpeed(player.getSpeed() * 0.1);
+		player.setSpeed(player.getSpeed() * 0.3);
 	}
 }
 
