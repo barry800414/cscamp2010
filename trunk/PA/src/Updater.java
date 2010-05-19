@@ -91,7 +91,7 @@ public class Updater {
 	 * Also enqueue updateAI() event.
 	 */
 	public void decideAI() {
-		final long time_to_update = game.getTime() + UPDATE_AI_PERIOD;
+		final long time_to_update = game.getCurrentEventTime() + UPDATE_AI_PERIOD;
 		
 		// Update all AI state
 		for(Player p : info.getAllPlayers()) {
