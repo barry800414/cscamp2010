@@ -1,6 +1,12 @@
+
 import java.util.Random;
 import java.util.Calendar;
 
+/**
+ * The Game class is a full built class that can new a instance to run the game
+ * @author mini_ming,rock1246,robertabcd
+ *
+ */
 public class Game {
 	/** For QoS purpose. */ 
 	public static final long EVENT_MAX_DELAY = 20;
