@@ -8,6 +8,9 @@ public class GraphicsEngine {
 	public static final int TARGET_FPS = 60;
 	public static final long UPDATE_FPS_PERIOD = 1000;
 	
+	public static final double PLAYER_SIZE = 20.0;
+	public static final double BULLET_SIZE = 5.0;
+	
 	private Game game;
 	private GameInfo info;
 	
@@ -76,13 +79,13 @@ public class GraphicsEngine {
 	
 	private void drawBullets(Graphics2D g) {
 		for(Bullet b : info.getAllBullets()) {
-			g.draw(new Ellipse2D.Double(b.getLocX(), b.getLocY(), 5, 5));
+			g.draw(new Ellipse2D.Double(b.getLocX() - BULLET_SIZE/2, b.getLocY() - BULLET_SIZE/2, BULLET_SIZE, BULLET_SIZE));
 		}
 	}
 	
 	private void drawPlayers(Graphics2D g) {
 		for(Player p : info.getAllPlayers()) {
-			g.draw(new Ellipse2D.Double(p.getLocX(), p.getLocY(), 20, 20));
+			g.draw(new Ellipse2D.Double(p.getLocX() - PLAYER_SIZE/2, p.getLocY() - PLAYER_SIZE/2, PLAYER_SIZE, PLAYER_SIZE));
 		}
 	}
 	

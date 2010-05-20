@@ -123,13 +123,13 @@ public class Game {
 		}
 		p.setAI(new AIHuman(g));
 
-		final Effect eff = new EffectFrozen(g, p);
+		/*final Effect eff = new EffectFrozen(g, p);
 		final long time_eff = 5000;
 		Event ev = new Event() {
 			public long getTime() { return time_eff; }
 			public void action() { System.out.println("Event: player frozen"); p.addEffect(eff); }
 		};
-		g.getGameQueue().addEvent(ev);
+		g.getGameQueue().addEvent(ev);*/
 		
 		g.getGameInfo().addPlayer(p);
 		
