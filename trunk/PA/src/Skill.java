@@ -25,16 +25,24 @@ public enum Skill {
 	},
 	SelfDestroy(4, false) {
 		public void use(Game game, Player src, Player target) {
-			GameInfo info = game.getGameInfo();
+			final GameInfo info = game.getGameInfo();
+			final Player self = src;
+			final long time_start = game.getTime() + 500;
 			
-			// Do damage to near objects (players, bullets)
-			GameObject[] near_obj = info.getNearObjects(src, 50.0);
-			for(GameObject obj : near_obj) {
-				obj.applyDamage(Damage.newWithLife(-1));
-			}
-			
-			// Do damage to the caster
-			src.applyDamage(Damage.newWithLife(-1));
+			Event ev = new Event() {
+				public long getTime() { return time_start; }
+				public void action() {
+					// Do damage to near objects (players, bullets)
+					GameObject[] near_obj = info.getNearObjects(self, 50.0);
+					for(GameObject obj : near_obj) {
+						obj.applyDamage(Damage.newWithLife(-1));
+					}
+					
+					// Do damage to the caster
+					self.applyDamage(Damage.newWithLife(-1));
+				}
+			};
+			game.getGameQueue().addEvent(ev);
 		}
 	},
 	ControlBullets(5, true) {

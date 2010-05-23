@@ -11,6 +11,7 @@ public class Effect {
 							EFFECT_ACCELERATE = 3,
 							EFFECT_SLOWDOWN = 9,
 							EFFECT_UNVULNERABLE = 11;
+	public static final int EFFECT_MAX_ID = 11;
 	
 	protected Game game;
 	protected Player player;
