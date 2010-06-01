@@ -1,5 +1,6 @@
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.lang.Math;
 
 /**
  * Updater
@@ -68,8 +69,28 @@ public class Updater {
 		}
 	}
 	
+	
 	private void detectCollisions() {
 		// TODO: detectCollisions() implementation
+		//int bullet_num = info.getNumBullets();
+		Bullet bullet[] = info.getAllBullets();
+		Player player[] = info.getAllPlayers();
+		for( int i = 0 ; i < bullet.length ; i++ )
+		{
+			for( int j = 0 ; j < player.length ; j++ )
+			{
+				if( Math.abs( bullet[i].getLocX()-player[j].getLocX() ) < 8 
+						&& Math.abs( bullet[i].getLocY()-player[j].getLocY() ) < 8  )
+				{
+					//System.out.println( "bird" );
+					bullet[i].applyDamage( Damage.newWithLife(-1) );
+					player[j].applyDamage( Damage.newWithLife(-1) );
+					//info.removeBullet( bullet[i] );
+					System.out.println( "player("+j+")was hitted, hp:"+player[j].getLife() );
+					//ufo's dead is not complete
+				}
+			}
+		}
 	}
 	
 	private void moveGameObject(GameObject obj) {
