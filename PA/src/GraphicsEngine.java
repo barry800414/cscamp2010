@@ -12,8 +12,8 @@ public class GraphicsEngine {
 	public static final int TARGET_FPS = 60;
 	public static final long UPDATE_FPS_PERIOD = 1000;
 	
-	public static final double PLAYER_SIZE = 20.0;
-	public static final double BULLET_SIZE = 5.0;
+	public static final double PLAYER_SIZE = 50.0;
+	public static final double BULLET_SIZE = 10.0;
 	
 	private Game game;
 	private GameInfo info;
