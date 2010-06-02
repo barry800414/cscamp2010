@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class Player extends GameObject {
-	public static final double	BASE_SPEED = 70.0;
+	public static final double	BASE_SPEED = 120.0;
 	public static final int		BASE_LIFE = 3;
 	
 	private int							id;
