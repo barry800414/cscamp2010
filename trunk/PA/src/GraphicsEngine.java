@@ -1,8 +1,12 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.geom.*;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 	
 public class GraphicsEngine {
 	public static final int TARGET_FPS = 60;
@@ -16,6 +20,8 @@ public class GraphicsEngine {
 	
 	private JFrame main_scr;
 	private BufferStrategy buffer;
+	private BufferedImage ufo;
+	private BufferedImage bullet;
 	
 	private long last_draw;
 	
@@ -37,6 +43,14 @@ public class GraphicsEngine {
 		
 		main_scr.createBufferStrategy(2);
 		buffer = main_scr.getBufferStrategy();
+		
+		try{
+			ufo = ImageIO.read(new File("ufo.png"));
+			bullet = ImageIO.read(new File("bullet.png"));
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
 		
 		draw();
 	}
@@ -79,13 +93,13 @@ public class GraphicsEngine {
 	
 	private void drawBullets(Graphics2D g) {
 		for(Bullet b : info.getAllBullets()) {
-			g.draw(new Ellipse2D.Double(b.getLocX() - BULLET_SIZE/2, b.getLocY() - BULLET_SIZE/2, BULLET_SIZE, BULLET_SIZE));
+			g.drawImage(bullet,(int)b.locX,(int)b.locY,null);
 		}
 	}
 	
 	private void drawPlayers(Graphics2D g) {
 		for(Player p : info.getAllPlayers()) {
-			g.draw(new Ellipse2D.Double(p.getLocX() - PLAYER_SIZE/2, p.getLocY() - PLAYER_SIZE/2, PLAYER_SIZE, PLAYER_SIZE));
+			g.drawImage(ufo,(int)p.locX,(int)p.locY,null);
 		}
 	}
 	
