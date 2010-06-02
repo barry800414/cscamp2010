@@ -79,8 +79,11 @@ public class Updater {
 		{
 			for( int j = 0 ; j < player.length ; j++ )
 			{
-				if( Math.abs( bullet[i].getLocX()-player[j].getLocX() ) < 8 
-						&& Math.abs( bullet[i].getLocY()-player[j].getLocY() ) < 8  )
+				double pradius = GraphicsEngine.PLAYER_SIZE/2;
+				double bradius = GraphicsEngine.BULLET_SIZE/2;
+				double distance = Math.sqrt(Math.pow(bullet[i].locX + bradius - player[j].locX - pradius,2)+ 
+						                    Math.pow(bullet[i].locY + bradius - player[j].locY - pradius,2));
+				if( distance <  pradius+bradius )
 				{
 					//System.out.println( "bird" );
 					bullet[i].applyDamage( Damage.newWithLife(-1) );
