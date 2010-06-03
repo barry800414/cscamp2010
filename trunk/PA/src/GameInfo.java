@@ -94,18 +94,18 @@ public class GameInfo {
 		ArrayList<GameObject> near_obj = new ArrayList<GameObject>();
 		
 		// Check for players
-		for(GameObject obj : players) {
+		for(GameObject obj : players.toArray(new GameObject[0])) {
 			if(obj != origin && origin.near(obj, range))
 				near_obj.add(obj);
 		}
 
 		// Check for bullets
-		for(GameObject obj : bullets) {
+		for(GameObject obj : bullets.toArray(new GameObject[0])) {
 			if(obj != origin && origin.near(obj, range))
 				near_obj.add(obj);
 		}
 		
-		return near_obj.toArray(new GameObject[] {});
+		return near_obj.toArray(new GameObject[0]);
 	}
 	
 	public double getWidth() { return FIELD_WIDTH; }
