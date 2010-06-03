@@ -112,7 +112,7 @@ public class Player extends GameObject {
 	
 	@Override
 	public void applyDamage(Damage damage) {
-		for(Effect eff : effects) {
+		for(Effect eff : getAllEffects()) {
 			eff.onDamage(damage);
 		}
 		
@@ -128,7 +128,7 @@ public class Player extends GameObject {
 		// Reset information
 		setSpeed(BASE_SPEED);
 		
-		for(Effect eff : effects) {
+		for(Effect eff : getAllEffects()) {
 			eff.onEffect();
 		}
 	}

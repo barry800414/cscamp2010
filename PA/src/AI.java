@@ -93,8 +93,8 @@ public abstract class AI {
 	}
 	
 	public final AIBullet getBullet(int index) {
-		if(index >= 0 && index < bullets.length)
-			return bullets[index];
+		if(index >= 1 && index <= bullets.length)
+			return bullets[index-1];
 		else
 			return null;
 	}
