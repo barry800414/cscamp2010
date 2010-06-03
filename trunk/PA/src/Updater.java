@@ -51,6 +51,7 @@ public class Updater {
 		movePlayers();
 		moveBullets();
 		detectCollisions();
+		setBullet();
 		
 		last_update = time_now;
 		enqueueNextUpdate();
@@ -69,6 +70,10 @@ public class Updater {
 		}
 	}
 	
+	private void setBullet() {
+		// TODO: setBUllet() implementation
+		// target a Bullet to a GameObject, use: bullet.setDirection(GameObject, miss)
+	}
 	
 	private void detectCollisions() {
 		// TODO: detectCollisions() implementation

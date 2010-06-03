@@ -117,6 +117,8 @@ public class Player extends GameObject {
 		}
 		
 		life += damage.life;
+		
+		if(life <= 0) game.getGameInfo().removePlayer(this);
 	}
 	
 	/**
