@@ -41,9 +41,6 @@ public class GraphicsEngine {
 
 		main_scr.setVisible(true);
 		
-		main_scr.createBufferStrategy(2);
-		buffer = main_scr.getBufferStrategy();
-		
 		try{
 			ufo = ImageIO.read(new File("ufo.png"));
 			bullet = ImageIO.read(new File("bullet.png"));
@@ -58,33 +55,45 @@ public class GraphicsEngine {
 	public void draw() {
 		long time_now = game.getCurrentEventTime();
 		
-		// Get the graphics buffer
-		Graphics g = buffer.getDrawGraphics();
-		Graphics2D g2d = (Graphics2D)g;
-		
-		// Clean buffer
-		g2d.clearRect(0, 0, (int)info.getWidth(), (int)info.getHeight());
-		
-		// Draw all components
-		drawBullets(g2d);
-		drawPlayers(g2d);
-		
-		// Cleanup
-		g.dispose();
-		buffer.show();
-		
-		// Calculate fps
-		long since_last_update = time_now - last_fps_update;
-		frames_drew++;
-		if(since_last_update >= UPDATE_FPS_PERIOD) {
-			fps = frames_drew * 1000.0 / since_last_update;
-			main_scr.setTitle(String.format("FPS: %.2f", fps));
-			frames_drew = 0;
-			last_fps_update = time_now;
+		/* We cannot create BufferStrategy if it is not diaplayable
+		 * (will result in a exception), and it is not necessary to
+		 * draw screen if it is not displayable.
+		 */
+		if(main_scr.isDisplayable()) {
+			// Create BufferStrategy on first draw.
+			if(buffer == null) {
+				main_scr.createBufferStrategy(2);
+				buffer = main_scr.getBufferStrategy();
+			}
+			
+			// Get the graphics buffer
+			Graphics g = buffer.getDrawGraphics();
+			Graphics2D g2d = (Graphics2D)g;
+			
+			// Clean buffer
+			g2d.clearRect(0, 0, (int)info.getWidth(), (int)info.getHeight());
+			
+			// Draw all components
+			drawBullets(g2d);
+			drawPlayers(g2d);
+			
+			// Cleanup
+			g.dispose();
+			buffer.show();
+			
+			// Calculate fps
+			long since_last_update = time_now - last_fps_update;
+			frames_drew++;
+			if(since_last_update >= UPDATE_FPS_PERIOD) {
+				fps = frames_drew * 1000.0 / since_last_update;
+				main_scr.setTitle(String.format("FPS: %.2f", fps));
+				frames_drew = 0;
+				last_fps_update = time_now;
+			}
+			
+			// Force to update
+			Toolkit.getDefaultToolkit().sync();
 		}
-		
-		// Force to update
-		Toolkit.getDefaultToolkit().sync();
 		
 		// Generate next draw event
 		last_draw = time_now;
