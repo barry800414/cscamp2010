@@ -42,8 +42,8 @@ public class GraphicsEngine {
 		main_scr.setVisible(true);
 		
 		try{
-			ufo = ImageIO.read(new File("ufo.png"));
-			bullet = ImageIO.read(new File("bullet.png"));
+			ufo = ImageIO.read(getClass().getResourceAsStream("ufo.png"));
+			bullet = ImageIO.read(getClass().getResourceAsStream("bullet.png"));
 		}
 		catch(Exception e){
 			System.out.println(e);
