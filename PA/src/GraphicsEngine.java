@@ -102,13 +102,15 @@ public class GraphicsEngine {
 	
 	private void drawBullets(Graphics2D g) {
 		for(Bullet b : info.getAllBullets()) {
-			g.drawImage(bullet,(int)b.locX,(int)b.locY,null);
+			g.drawImage(bullet,(int)(b.locX-BULLET_SIZE/2),(int)(b.locY-BULLET_SIZE/2),null);
 		}
 	}
 	
 	private void drawPlayers(Graphics2D g) {
 		for(Player p : info.getAllPlayers()) {
-			g.drawImage(ufo,(int)p.locX,(int)p.locY,null);
+			if(p.isAlive()) {
+				g.drawImage(ufo,(int)(p.locX-PLAYER_SIZE/2),(int)(p.locY-PLAYER_SIZE/2),null);
+			}
 		}
 	}
 	

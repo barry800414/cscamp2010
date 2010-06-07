@@ -60,8 +60,18 @@ public class Updater {
 	
 	private void movePlayers() {
 		for(Player p : info.getAllPlayers()) {
-			p.updateStatus();
-			moveGameObject(p);
+			if(p.isAlive()) {
+				p.updateStatus();
+				moveGameObject(p);
+				
+				// check if out of bounds
+				double x = p.getLocX(), y = p.getLocY();
+				if(x < 0) x = 0;
+				if(x > info.getWidth()) x = info.getWidth();
+				if(y < 0) y = 0;
+				if(y > info.getHeight()) y = info.getHeight();
+				p.setLoc(x, y);
+			}
 		}
 	}
 	
@@ -87,8 +97,8 @@ public class Updater {
 			{
 				double pradius = GraphicsEngine.PLAYER_SIZE/2;
 				double bradius = GraphicsEngine.BULLET_SIZE/2;
-				double distance = Math.sqrt(Math.pow(bullet[i].locX + bradius - player[j].locX - pradius,2)+ 
-						                    Math.pow(bullet[i].locY + bradius - player[j].locY - pradius,2));
+				double distance = Math.sqrt(Math.pow(bullet[i].locX - player[j].locX,2)+ 
+						                    Math.pow(bullet[i].locY - player[j].locY,2));
 				if( distance <  pradius+bradius )
 				{
 					//System.out.println( "bird" );
@@ -126,25 +136,27 @@ public class Updater {
 		
 		// Update all AI state
 		for(Player p : info.getAllPlayers()) {
-			AI ai = p.getAI();
-			AIRunner runner = p.getAIRunner();
-			// Only run AI if it is finished
-			if(ai != null && runner.isFinished()) {
-				ai.resetInternalState();
-				ai.updateGameInfo(game, p);
-				
-				// Notify AI if a player used a skill
-				for(Enumeration<Player> e = skill_used_last_ai_update.keys(); e.hasMoreElements(); ) {
-					Player player = e.nextElement();
-					Skill skill = skill_used_last_ai_update.get(player);
-					if(skill != null) {
-						ai.onPlayerSkillUsage(player, skill);
+			if(p.isAlive()) {
+				AI ai = p.getAI();
+				AIRunner runner = p.getAIRunner();
+				// Only run AI if it is finished
+				if(ai != null && runner.isFinished()) {
+					ai.resetInternalState();
+					ai.updateGameInfo(game, p);
+					
+					// Notify AI if a player used a skill
+					for(Enumeration<Player> e = skill_used_last_ai_update.keys(); e.hasMoreElements(); ) {
+						Player player = e.nextElement();
+						Skill skill = skill_used_last_ai_update.get(player);
+						if(skill != null) {
+							ai.onPlayerSkillUsage(player, skill);
+						}
 					}
-				}
-				
-				// Run AI
-				runner.run();
-			}
+					
+					// Run AI
+					runner.run();
+				} // if has ai and finished
+			} // if isAlive()
 		}
 		
 		// Clear the skill usage table on each decide turn
@@ -165,28 +177,30 @@ public class Updater {
 	public void updateAI() {
 		// Update all AI state
 		for(Player p : info.getAllPlayers()) {
-			AI ai = p.getAI();
-			AIRunner runner = p.getAIRunner();
-			// Only do AI action if it is finished
-			if(ai != null && runner.isFinished()) {
-				// Update direction
-				p.setDir(ai.getMove());
-				
-				// Check if using a skill
-				if(ai.isUsingSkill()) {
-					Skill skill = ai.getSkill();
-					if(p.getSkillQuota(skill) > 0) {
-						Player target = info.getPlayerFromId(ai.getTarget());
-						if(!skill.canSetTarget() || target == null) {
-							target = p;
+			if(p.isAlive()) {
+				AI ai = p.getAI();
+				AIRunner runner = p.getAIRunner();
+				// Only do AI action if it is finished
+				if(ai != null && runner.isFinished()) {
+					// Update direction
+					p.setDir(ai.getMove());
+					
+					// Check if using a skill
+					if(ai.isUsingSkill()) {
+						Skill skill = ai.getSkill();
+						if(p.getSkillQuota(skill) > 0) {
+							Player target = info.getPlayerFromId(ai.getTarget());
+							if(!skill.canSetTarget() || target == null) {
+								target = p;
+							}
+							
+							// Record it and use it
+							skill_used_last_ai_update.put(p, skill);
+							p.useSkill(skill, target);
 						}
-						
-						// Record it and use it
-						skill_used_last_ai_update.put(p, skill);
-						p.useSkill(skill, target);
 					}
-				}
-			}
+				} // if has ai and finished
+			} // if isAlive()
 		}
 		
 		// Make AI into decide mode

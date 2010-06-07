@@ -1,38 +1,6 @@
-import javax.swing.JFrame;
 
 public class SampleAI01 extends AI {
-	private Game game;
-	private Keyboard kb;
-	private boolean ready;
-	
-	public SampleAI01(Game game) {
-		this.game = game;
-		init();
-	}
-
-	/** Do a late init, due to the main frame may not have been created on instance creation. */
-	private boolean init() {
-		if(!ready && game != null) {
-			GraphicsEngine ge = this.game.getGraphicsEngine();
-			if(ge != null) {
-				JFrame main_scr = ge.getMainFrame();
-				if(main_scr != null) {
-					this.kb = new Keyboard();
-					main_scr.addKeyListener(kb);
-					main_scr.addFocusListener(kb);
-					
-					ready = true;
-				}
-			}
-		}
-		return ready;
-	}
-	
 	public void run() {
-		//System.out.println("AIHuman: run()");
-		
-		if(!ready && !init()) return;
-		
 		AIPlayer myself = getPlayer(myId);
 		int bulletsnum = getNumBullets();
 		AIBullet bullet ;

@@ -1,6 +1,6 @@
 
 public class Bullet extends GameObject {
-	public static double BASE_SPEED = 50.0;
+	public static double BASE_SPEED = 70.0;
 	
 	private Player owner;
 	

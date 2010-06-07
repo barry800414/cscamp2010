@@ -107,41 +107,4 @@ public class Game {
 			}
 		}
 	}
-	
-	public static void main(String[] args) {
-		final int BULLETS = 100;
-		
-		Game g = new Game();
-		
-		final Player p = new Player(g);
-		p.setLoc(0.0, 300.0);
-		p.setDir(1);
-		p.setId(1);
-		p.setName("Human player");
-		for(int i = 1; i <= 10; i++) {
-			p.setSkillQuota(Skill.skillFromId(i), 1);
-		}
-		p.setAI(new AIHuman(g));
-
-		/*final Effect eff = new EffectFrozen(g, p);
-		final long time_eff = 5000;
-		Event ev = new Event() {
-			public long getTime() { return time_eff; }
-			public void action() { System.out.println("Event: player frozen"); p.addEffect(eff); }
-		};
-		g.getGameQueue().addEvent(ev);*/
-		
-		g.getGameInfo().addPlayer(p);
-		
-		Bullet[] b = new Bullet[BULLETS];
-		for(int i = 0; i < BULLETS; i++) {
-			b[i] = new Bullet(g);
-			b[i].setLoc(g.getGameInfo().getWidth() * g.random.nextDouble(), g.getGameInfo().getHeight() * g.random.nextDouble());
-			b[i].setDir(g.random.nextDouble() - 0.5, g.random.nextDouble() - 0.5);
-			//b[i].setSpeed(1.0);
-			g.getGameInfo().addBullet(b[i]);
-		}
-		
-		g.startGame();
-	}
 }
