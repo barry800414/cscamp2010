@@ -95,6 +95,8 @@ public class Updater {
 		{
 			for( int j = 0 ; j < player.length ; j++ )
 			{
+				if(!player[j].isAlive()) continue;
+				
 				double pradius = GraphicsEngine.PLAYER_SIZE/2;
 				double bradius = GraphicsEngine.BULLET_SIZE/2;
 				double distance = Math.sqrt(Math.pow(bullet[i].locX - player[j].locX,2)+ 
