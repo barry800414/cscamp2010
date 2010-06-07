@@ -3,13 +3,14 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class Player extends GameObject {
-	public static final double	BASE_SPEED = 120.0;
+	public static final double	BASE_SPEED = 200.0;
 	public static final int		BASE_LIFE = 3;
 	
 	private int							id;
 	private String						name;
 	private int							life;
 	private boolean						silence;
+	private boolean						alive;
 	private Hashtable<Skill, Integer>	skill_quota;
 	private ArrayList<Effect>			effects;
 	private AIRunner					ai_runner;
@@ -20,6 +21,7 @@ public class Player extends GameObject {
 		id = 0;
 		life = BASE_LIFE;
 		silence = false;
+		alive = true;
 		skill_quota = new Hashtable<Skill, Integer>();
 		effects = new ArrayList<Effect>();
 		ai_runner = null;
@@ -53,6 +55,10 @@ public class Player extends GameObject {
 	
 	public void setSilence(boolean silence) {
 		this.silence = silence;
+	}
+	
+	public boolean isAlive() {
+		return alive;
 	}
 	
 	public void useSkill(Skill skill, Player target) {
@@ -118,7 +124,9 @@ public class Player extends GameObject {
 		
 		life += damage.life;
 		
-		if(life <= 0) game.getGameInfo().removePlayer(this);
+		if(life <= 0) {
+			alive = false;
+		}
 	}
 	
 	/**
