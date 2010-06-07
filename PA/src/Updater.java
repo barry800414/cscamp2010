@@ -13,7 +13,8 @@ public class Updater {
 	public static final long UPDATE_PERIOD = 1000 / 60;
 	/** The time in millisecond that AI should make decision. */
 	public static final long UPDATE_AI_PERIOD = 100;
-	public static final double SPEED_CORRECTION = 2.0;
+	/** This constant is not in use now, due to we have set the speed to pixel/sec. */
+	public static final double SPEED_CORRECTION = 1.0; // Always set to 1.0
 	
 	private Game game;
 	private GameInfo info;
