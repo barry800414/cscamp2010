@@ -1,6 +1,7 @@
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.lang.Math;
+import java.util.Random;
 
 /**
  * Updater
@@ -82,15 +83,27 @@ public class Updater {
 	}
 	
 	private void setBullet() {
-		// TODO: setBUllet() implementation
 		// target a Bullet to a GameObject, use: bullet.setDirection(GameObject, miss)
+		Bullet bullet[] = info.getAllBullets();
+		Player player[] = info.getAllPlayers();
+		final double BULLET_SPACING = -30.0;
+		double w = info.getWidth(), h = info.getHeight();
+		Random random = new Random();
+		
+		for( int i = 0 ; i < bullet.length ; i++ )
+		{
+			if( bullet[i].getLocX() < BULLET_SPACING || bullet[i].getLocX() > w ||
+					bullet[i].getLocY() < BULLET_SPACING || bullet[i].getLocY() > h  )
+			{
+				bullet[i].setDirection( player[random.nextInt(player.length)] , random.nextInt(100) );
+			}
+		}
 	}
 	
 	private void detectCollisions() {
-		// TODO: detectCollisions() implementation
-		//int bullet_num = info.getNumBullets();
 		Bullet bullet[] = info.getAllBullets();
 		Player player[] = info.getAllPlayers();
+		//bullet hit player
 		for( int i = 0 ; i < bullet.length ; i++ )
 		{
 			for( int j = 0 ; j < player.length ; j++ )
@@ -103,15 +116,27 @@ public class Updater {
 						                    Math.pow(bullet[i].locY - player[j].locY,2));
 				if( distance <  pradius+bradius )
 				{
-					//System.out.println( "bird" );
 					bullet[i].applyDamage( Damage.newWithLife(-1) );
 					player[j].applyDamage( Damage.newWithLife(-1) );
-					//info.removeBullet( bullet[i] );
 					System.out.println( "player("+j+")was hitted, hp:"+player[j].getLife() );
 					//ufo's dead is not complete
 				}
 			}
 		}
+		//players collide each other
+		for( int i = 0 ; i < player.length ; i++ )
+			for( int j = i+1 ; j < player.length ; j++ )
+			{
+				double pradius = GraphicsEngine.PLAYER_SIZE;
+				double distance = Math.sqrt(Math.pow(player[i].locX - player[j].locX,2)+ 
+											Math.pow(player[i].locY - player[j].locY,2));
+				if( distance < pradius )
+				{
+					player[i].applyDamage( Damage.newWithLife(-1) );
+					player[j].applyDamage( Damage.newWithLife(-1) );
+					System.out.println( "player("+i+") and player("+j+") collide each other, hp:"+player[i].getLife()+","+player[j].getLife() );
+				}
+			}
 	}
 	
 	private void moveGameObject(GameObject obj) {
