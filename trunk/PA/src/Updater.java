@@ -101,6 +101,8 @@ public class Updater {
 	}
 	
 	private void detectCollisions() {
+		final double pradius = GraphicsEngine.PLAYER_SIZE/2;
+		final double bradius = GraphicsEngine.BULLET_SIZE/2;
 		Bullet bullet[] = info.getAllBullets();
 		Player player[] = info.getAllPlayers();
 		//bullet hit player
@@ -110,8 +112,6 @@ public class Updater {
 			{
 				if(!player[j].isAlive()) continue;
 				
-				double pradius = GraphicsEngine.PLAYER_SIZE/2;
-				double bradius = GraphicsEngine.BULLET_SIZE/2;
 				double distance = Math.sqrt(Math.pow(bullet[i].locX - player[j].locX,2)+ 
 						                    Math.pow(bullet[i].locY - player[j].locY,2));
 				if( distance <  pradius+bradius )
@@ -127,10 +127,9 @@ public class Updater {
 		for( int i = 0 ; i < player.length ; i++ )
 			for( int j = i+1 ; j < player.length ; j++ )
 			{
-				double pradius = GraphicsEngine.PLAYER_SIZE;
 				double distance = Math.sqrt(Math.pow(player[i].locX - player[j].locX,2)+ 
 											Math.pow(player[i].locY - player[j].locY,2));
-				if( distance < pradius )
+				if( distance < pradius*2 )
 				{
 					player[i].applyDamage( Damage.newWithLife(-1) );
 					player[j].applyDamage( Damage.newWithLife(-1) );
