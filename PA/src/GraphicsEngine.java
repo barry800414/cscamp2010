@@ -14,14 +14,16 @@ public class GraphicsEngine {
 	
 	public static final double PLAYER_SIZE = 50.0;
 	public static final double BULLET_SIZE = 10.0;
+	public static final double SHIELD_SIZE = 74;
 	
 	private Game game;
 	private GameInfo info;
 	
 	private JFrame main_scr;
 	private BufferStrategy buffer;
-	private BufferedImage ufo;
+	private BufferedImage[] ufo = new BufferedImage[9];
 	private BufferedImage bullet;
+	private BufferedImage shield1;
 	
 	private long last_draw;
 	
@@ -42,11 +44,22 @@ public class GraphicsEngine {
 		main_scr.setVisible(true);
 		
 		try{
-			ufo = ImageIO.read(getClass().getResourceAsStream("ufo.png"));
+			ufo[0] = ImageIO.read(getClass().getResourceAsStream("ufo.png"));
+			ufo[1] = ImageIO.read(getClass().getResourceAsStream("ufo_right.png"));
+			ufo[2] = ImageIO.read(getClass().getResourceAsStream("ufo_upright.png"));
+			ufo[3] = ImageIO.read(getClass().getResourceAsStream("ufo_up.png"));
+			ufo[4] = ImageIO.read(getClass().getResourceAsStream("ufo_upleft.png"));
+			ufo[5] = ImageIO.read(getClass().getResourceAsStream("ufo_left.png"));
+			ufo[6] = ImageIO.read(getClass().getResourceAsStream("ufo_downleft.png"));
+			ufo[7] = ImageIO.read(getClass().getResourceAsStream("ufo_down.png"));
+			ufo[8] = ImageIO.read(getClass().getResourceAsStream("ufo_downright.png"));
+			
 			bullet = ImageIO.read(getClass().getResourceAsStream("bullet.png"));
+			shield1 = ImageIO.read(getClass().getResourceAsStream("shieldA.png"));
 		}
 		catch(Exception e){
 			System.out.println(e);
+			System.out.println("test!!!");
 		}
 		
 		draw();
@@ -109,7 +122,8 @@ public class GraphicsEngine {
 	private void drawPlayers(Graphics2D g) {
 		for(Player p : info.getAllPlayers()) {
 			if(p.isAlive()) {
-				g.drawImage(ufo,(int)(p.locX-PLAYER_SIZE/2),(int)(p.locY-PLAYER_SIZE/2),null);
+				g.drawImage(ufo[p.direct],(int)(p.locX-PLAYER_SIZE/2),(int)(p.locY-PLAYER_SIZE/2),null);
+				g.drawImage(shield1,(int)(p.locX-SHIELD_SIZE/2) , (int)(p.locY-SHIELD_SIZE/2),null);
 			}
 		}
 	}
