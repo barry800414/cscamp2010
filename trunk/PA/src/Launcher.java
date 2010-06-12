@@ -34,7 +34,7 @@ public class Launcher {
 			
 			g.getGameInfo().addPlayer(p);
 		}
-		
+		/*
 		// Init bullets
 		int BULLETS = 50;
 		Bullet[] b = new Bullet[BULLETS];
@@ -45,7 +45,7 @@ public class Launcher {
 			//b[i].setSpeed(1.0);
 			g.getGameInfo().addBullet(b[i]);
 		}
-		
+		*/
 		// Starts the game
 		g.startGame();
 	}
