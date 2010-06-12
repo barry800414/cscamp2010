@@ -49,10 +49,10 @@ public class Updater {
 		 */
 		long time_now = game.getTime();
 		since_last_update = time_now - last_update;
-		
+		detectPlayerCollisions();
 		movePlayers();
 		moveBullets();
-		detectCollisions();
+		detectBulletCollisions();
 		setBullet();
 		
 		last_update = time_now;
@@ -86,23 +86,66 @@ public class Updater {
 		// target a Bullet to a GameObject, use: bullet.setDirection(GameObject, miss)
 		Bullet bullet[] = info.getAllBullets();
 		Player player[] = info.getAllPlayers();
-		final double BULLET_SPACING = -30.0;
+		final double BULLET_SPACING = 150.0;
 		double w = info.getWidth(), h = info.getHeight();
-		Random random = new Random();
+		Random random = game.random;
 		
+		//make bullet
+		if( game.getTime()%100 == 0 )
+		{
+			Bullet b = new Bullet(game);
+			//b.setLoc(info.getWidth() * random.nextDouble(), info.getHeight() * random.nextDouble());
+			int tmp = random.nextInt(4);
+			if( tmp == 0 )
+				b.setLoc(-BULLET_SPACING, info.getHeight() * random.nextDouble());
+			if( tmp == 1 )
+				b.setLoc(info.getWidth() * random.nextDouble(), -BULLET_SPACING);
+			if( tmp == 2 )
+				b.setLoc(w+BULLET_SPACING, info.getHeight() * random.nextDouble());
+			if( tmp == 3 )
+				b.setLoc(info.getWidth() * random.nextDouble(), h+BULLET_SPACING);
+			b.setDir(random.nextDouble() - 0.5, random.nextDouble() - 0.5);
+			info.addBullet(b);
+		}
+		
+		//turn back
 		for( int i = 0 ; i < bullet.length ; i++ )
 		{
-			if( bullet[i].getLocX() < BULLET_SPACING || bullet[i].getLocX() > w ||
-					bullet[i].getLocY() < BULLET_SPACING || bullet[i].getLocY() > h  )
+			if( bullet[i].getLocX() < -BULLET_SPACING || bullet[i].getLocX() > w+BULLET_SPACING ||
+					bullet[i].getLocY() < -BULLET_SPACING || bullet[i].getLocY() > h+BULLET_SPACING  )
 			{
-				bullet[i].setDirection( player[random.nextInt(player.length)] , random.nextInt(100) );
+				bullet[i].setDirection( player[random.nextInt(player.length)] , 200+random.nextInt(300) );
 			}
 		}
 	}
 	
-	private void detectCollisions() {
+	private void detectPlayerCollisions()
+	{
+		final double pradius = GraphicsEngine.PLAYER_SIZE/2;
+		Player player[] = info.getAllPlayers();
+		
+		for( int i = 0 ; i < player.length ; i++ )
+			for( int j = i+1 ; j < player.length ; j++ )
+			{
+				double distance = Math.sqrt(Math.pow(player[i].locX - player[j].locX,2)+ 
+											Math.pow(player[i].locY - player[j].locY,2));
+				if( distance < pradius*2 )
+				{
+					//-hp version
+					player[i].applyDamage( Damage.newWithLife(-1) );
+					player[j].applyDamage( Damage.newWithLife(-1) );
+					System.out.println( "player("+i+") and player("+j+") collide each other, hp:"+player[i].getLife()+","+player[j].getLife() );
+					//TODO: 推擠版
+				}
+			}
+		
+		
+	}
+	
+	private void detectBulletCollisions() {
 		final double pradius = GraphicsEngine.PLAYER_SIZE/2;
 		final double bradius = GraphicsEngine.BULLET_SIZE/2;
+		final double shidius = GraphicsEngine.SHIELD_SIZE/2;
 		Bullet bullet[] = info.getAllBullets();
 		Player player[] = info.getAllPlayers();
 		//bullet hit player
@@ -112,9 +155,16 @@ public class Updater {
 			{
 				if(!player[j].isAlive()) continue;
 				
+				//detect shield
+				Effect[] effect = player[j].getAllEffects();
+				boolean shield = false;
+				for( int k = 0 ; k < effect.length ; k++ )
+					if( effect[k].getId() == Effect.EFFECT_SHIELDA || effect[k].getId() == Effect.EFFECT_SHIELDB )
+						shield = true;
+				
 				double distance = Math.sqrt(Math.pow(bullet[i].locX - player[j].locX,2)+ 
-						                    Math.pow(bullet[i].locY - player[j].locY,2));
-				if( distance <  pradius+bradius )
+	                    Math.pow(bullet[i].locY - player[j].locY,2));
+				if( distance <  bradius + (shield?shidius:pradius) )
 				{
 					bullet[i].applyDamage( Damage.newWithLife(-1) );
 					player[j].applyDamage( Damage.newWithLife(-1) );
@@ -123,19 +173,7 @@ public class Updater {
 				}
 			}
 		}
-		//players collide each other
-		for( int i = 0 ; i < player.length ; i++ )
-			for( int j = i+1 ; j < player.length ; j++ )
-			{
-				double distance = Math.sqrt(Math.pow(player[i].locX - player[j].locX,2)+ 
-											Math.pow(player[i].locY - player[j].locY,2));
-				if( distance < pradius*2 )
-				{
-					player[i].applyDamage( Damage.newWithLife(-1) );
-					player[j].applyDamage( Damage.newWithLife(-1) );
-					System.out.println( "player("+i+") and player("+j+") collide each other, hp:"+player[i].getLife()+","+player[j].getLife() );
-				}
-			}
+
 	}
 	
 	private void moveGameObject(GameObject obj) {
