@@ -138,10 +138,12 @@ public class Player extends GameObject {
 			
 			if(life <= 0) {
 				alive = false;
+			} else {
+				if(damage.life < 0) {
+					// Make us unvulnerable for a small time
+					addEffect(new EffectUnvulnerable(game, this));
+				}
 			}
-			
-			// Make us unvulnerable for a small time
-			addEffect(new EffectUnvulnerable(game, this));
 		}
 	}
 	
