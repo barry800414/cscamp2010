@@ -66,11 +66,13 @@ public class Updater {
 				moveGameObject(p);
 				
 				// check if out of bounds
+				double size = GraphicsEngine.PLAYER_SIZE/2;
+				
 				double x = p.getLocX(), y = p.getLocY();
-				if(x < 0) x = 0;
-				if(x > info.getWidth()) x = info.getWidth();
-				if(y < 0) y = 0;
-				if(y > info.getHeight()) y = info.getHeight();
+				if(x < size) x = size;
+				if(x > info.getWidth() - size) x = info.getWidth() - size;
+				if(y < size) y = size;
+				if(y > info.getHeight() - size) y = info.getHeight() - size;
 				p.setLoc(x, y);
 			}
 		}

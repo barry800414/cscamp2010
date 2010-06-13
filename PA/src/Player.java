@@ -13,6 +13,7 @@ public class Player extends GameObject {
 	private boolean						alive;
 	private Hashtable<Skill, Integer>	skill_quota;
 	private ArrayList<Effect>			effects;
+	private boolean[]					in_state;
 	private AIRunner					ai_runner;
 	
 	public Player(Game game) {
@@ -24,6 +25,7 @@ public class Player extends GameObject {
 		alive = true;
 		skill_quota = new Hashtable<Skill, Integer>();
 		effects = new ArrayList<Effect>();
+		in_state = new boolean[Effect.EFFECT_MAX_ID + 1];
 		ai_runner = null;
 		
 		updateStatus();
@@ -104,10 +106,12 @@ public class Player extends GameObject {
 		System.out.println("Player [" + this + "]: effect [" + effect + "] onSet");
 		effects.add(effect);
 		effect.onSet();
+		in_state[effect.getId()] = true;
 	}
 	
 	public void removeEffect(Effect effect) {
 		System.out.println("Player [" + this + "]: effect [" + effect + "] onRemove");
+		in_state[effect.getId()] = false;
 		effect.onRemove();
 		effects.remove(effect);
 	}
@@ -116,16 +120,28 @@ public class Player extends GameObject {
 		return effects.toArray(new Effect[0]);
 	}
 	
+	public boolean hasState(int id) {
+		if(id >= 0 && id <= Effect.EFFECT_MAX_ID)
+			return in_state[id];
+		else
+			return false;
+	}
+	
 	@Override
 	public void applyDamage(Damage damage) {
-		for(Effect eff : getAllEffects()) {
-			eff.onDamage(damage);
-		}
-		
-		life += damage.life;
-		
-		if(life <= 0) {
-			alive = false;
+		if(alive) {
+			for(Effect eff : getAllEffects()) {
+				eff.onDamage(damage);
+			}
+			
+			life += damage.life;
+			
+			if(life <= 0) {
+				alive = false;
+			}
+			
+			// Make us unvulnerable for a small time
+			addEffect(new EffectUnvulnerable(game, this));
 		}
 	}
 	
