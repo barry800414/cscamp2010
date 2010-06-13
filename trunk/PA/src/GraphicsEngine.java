@@ -20,6 +20,7 @@ public class GraphicsEngine {
 	private GameInfo info;
 	
 	private JFrame main_scr;
+	private Canvas game_scr;
 	private BufferStrategy buffer;
 	private BufferedImage[] ufo = new BufferedImage[9];
 	private BufferedImage bullet;
@@ -37,10 +38,16 @@ public class GraphicsEngine {
 	}
 	
 	public void init() {
+		game_scr = new Canvas();
+		game_scr.setSize((int)info.getWidth(), (int)info.getHeight());
+		game_scr.setFocusable(false);
+		game_scr.validate();
+		
 		main_scr = new JFrame();
 		main_scr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		main_scr.setSize((int)info.getWidth(), (int)info.getHeight());
-
+		main_scr.add(game_scr);
+		// Make JFrame resize to fit the size of the components
+		main_scr.pack();
 		main_scr.setVisible(true);
 		
 		try{
@@ -72,11 +79,11 @@ public class GraphicsEngine {
 		 * (will result in a exception), and it is not necessary to
 		 * draw screen if it is not displayable.
 		 */
-		if(main_scr.isDisplayable()) {
+		if(game_scr.isDisplayable()) {
 			// Create BufferStrategy on first draw.
 			if(buffer == null) {
-				main_scr.createBufferStrategy(2);
-				buffer = main_scr.getBufferStrategy();
+				game_scr.createBufferStrategy(2);
+				buffer = game_scr.getBufferStrategy();
 			}
 			
 			// Get the graphics buffer
@@ -123,7 +130,11 @@ public class GraphicsEngine {
 		for(Player p : info.getAllPlayers()) {
 			if(p.isAlive()) {
 				g.drawImage(ufo[p.direct],(int)(p.locX-PLAYER_SIZE/2),(int)(p.locY-PLAYER_SIZE/2),null);
-				g.drawImage(shield1,(int)(p.locX-SHIELD_SIZE/2) , (int)(p.locY-SHIELD_SIZE/2),null);
+				
+				// TODO: need to be change to apply Animation mechanism.
+				if(p.hasState(Effect.EFFECT_SHIELDA) || p.hasState(Effect.EFFECT_SHIELDB) || p.hasState(Effect.EFFECT_UNVULNERABLE)) {
+					g.drawImage(shield1,(int)(p.locX-SHIELD_SIZE/2) , (int)(p.locY-SHIELD_SIZE/2),null);
+				}
 			}
 		}
 	}
