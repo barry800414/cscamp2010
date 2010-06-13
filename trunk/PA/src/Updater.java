@@ -127,8 +127,11 @@ public class Updater {
 		Player player[] = info.getAllPlayers();
 		
 		for( int i = 0 ; i < player.length ; i++ )
+		{
+			if(!player[i].isAlive()) continue;
 			for( int j = i+1 ; j < player.length ; j++ )
 			{
+				if(!player[j].isAlive()) continue;
 				double distance = Math.sqrt(Math.pow(player[i].locX - player[j].locX,2)+ 
 											Math.pow(player[i].locY - player[j].locY,2));
 				if( distance < pradius*2 )
@@ -140,7 +143,7 @@ public class Updater {
 					//TODO: 推擠版
 				}
 			}
-		
+		}
 		
 	}
 	
