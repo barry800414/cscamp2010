@@ -30,6 +30,7 @@ public class AIHuman2 extends AI {
 	}
 	
 	public void run() {
+		/*
 		//System.out.println("AIHuman: run()");
 		
 		if(!ready && !init()) return;
@@ -40,6 +41,7 @@ public class AIHuman2 extends AI {
 		 * Calculates the direction the player would like to move,
 		 * See GameObject.setDir(int) for defined directions.
 		 */
+		/*
 		int dir = 0, n = 0;
 		if(kW) { dir += 3; n++; }
 		if(kA) { dir += 5; n++; }
@@ -57,6 +59,7 @@ public class AIHuman2 extends AI {
 		/*
 		 * Detect if the player wants to cast a skill.
 		 */
+		/*
 		int skill = -1;
 		for(int i = 1; i <= 10; i++) {
 			if(kb.isKeyDownOnce(KeyEvent.VK_0 + (i % 10))) {
@@ -68,5 +71,6 @@ public class AIHuman2 extends AI {
 			if(skill == 0) skill = 10;
 			useSkill(skill, myId);
 		}
+		*/
 	}
 }
