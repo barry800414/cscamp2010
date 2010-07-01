@@ -31,13 +31,16 @@ public class GameObject {
 	}
 	
 	/** Returns the correct radius from 0~2pi */
-	public double getDirectRad() { 
+	public double getDirectRad() {
+		double rad = 0.0;
 		if(dirX == 0.0) {
 			// don't care if (speed == 0)
-			return Math.PI / 2 * ((dirY > 0.0) ? 3 : 1);
+			rad = Math.PI / 2 * ((dirY > 0.0) ? 3 : 1);
 		} else {
-			return Math.atan2(-dirY, dirX) + Math.PI;
+			rad = Math.atan2(-dirY, dirX) + Math.PI;
 		}
+		if(rad >= Math.PI*2) rad -= Math.PI*2;
+		return rad;
 	}
 	
 	public double getSpeed() {
@@ -57,7 +60,7 @@ public class GameObject {
 			dirY = y / length;
 			
 			// Set this.direct to appropriate value
-			direct = 1 + (int)Math.round((getDirectRad() * 180 / Math.PI) / (360 / 8));
+			direct = 1 + (int)Math.round((getDirectRad() / Math.PI / 2) * 8);
 		} else {
 			dirX = 0.0;
 			dirY = 0.0;
