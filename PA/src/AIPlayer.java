@@ -3,7 +3,8 @@ public final class AIPlayer {
 	private Player player;
 	private boolean[] player_in_state;
 	
-	public int locX, locY, life, direct, speed, player_skill;
+	public double locX, locY, speed, speedX, speedY;
+	public int life, player_skill;
 	
 	public boolean hasState(int state) {
 		return (state >= 1 && state <= Effect.EFFECT_MAX_ID) ? player_in_state[state] : false;
@@ -19,11 +20,12 @@ public final class AIPlayer {
 	
 	public AIPlayer(Player player) {
 		this.player = player;
-		locX = (int)Math.round(player.getLocX());
-		locY = (int)Math.round(player.getLocY());
+		locX = player.getLocX();
+		locY = player.getLocY();
 		life = player.getLife();
-		direct = player.getDirect();
-		speed = (int)Math.round(player.getSpeed());
+		speed = player.getSpeed();
+		speedX = player.getDirX()*player.getSpeed();
+		speedY = player.getDirX()*player.getSpeed();
 		
 		player_in_state = new boolean[Effect.EFFECT_MAX_ID + 1];
 		for(Effect eff : player.getAllEffects()) {
