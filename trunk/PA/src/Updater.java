@@ -49,9 +49,9 @@ public class Updater {
 		 */
 		long time_now = game.getTime();
 		since_last_update = time_now - last_update;
+		detectPlayerCollisions();
 		movePlayers();
 		moveBullets();
-		detectPlayerCollisions();
 		detectBulletCollisions();
 		setBullet();
 		
@@ -132,18 +132,24 @@ public class Updater {
 			for( int j = i+1 ; j < player.length ; j++ )
 			{
 				if(!player[j].isAlive()) continue;
-				double distance = Math.sqrt(Math.pow(player[i].locX - player[j].locX,2)+ 
-											Math.pow(player[i].locY - player[j].locY,2));
-				if( distance < pradius*2 )
+				double distance = Tool.distance(player[i], player[j]);
+				double sp = SPEED_CORRECTION * since_last_update / 1000;
+				double distance_after = Tool.distance(
+						player[i].getLocX()+player[i].getDirX()*player[i].getSpeed()*sp,
+						player[i].getLocY()+player[i].getDirY()*player[i].getSpeed()*sp,
+						player[j].getLocX()+player[j].getDirX()*player[j].getSpeed()*sp,
+						player[j].getLocY()+player[j].getDirY()*player[j].getSpeed()*sp
+				);
+				if( distance < pradius*2 && distance >= distance_after )
 				{
 					
 					//-hp version
-					player[i].applyDamage( Damage.newWithLife(-1) );
+					/*player[i].applyDamage( Damage.newWithLife(-1) );
 					player[j].applyDamage( Damage.newWithLife(-1) );
 					System.out.println( "player("+i+") and player("+j+") collide each other, hp:"+player[i].getLife()+","+player[j].getLife() );
-					
+					*/
 					//TODO push version
-					/*
+					
 					double speed_x = (player[i].getSpeed()*player[i].getDirX())+
 										(player[j].getSpeed()*player[j].getDirX())/2;
 					double speed_y = (player[i].getSpeed()*player[i].getDirY())+
@@ -153,7 +159,7 @@ public class Updater {
 					player[i].setDir(speed_x, speed_y);
 					player[j].setSpeed(speed);
 					player[j].setDir(speed_x, speed_y);
-					*/
+					
 				}
 			}
 		}

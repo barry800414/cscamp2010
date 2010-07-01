@@ -29,6 +29,9 @@ public class Launcher {
 				
 				p.setAI(new AIHuman(g));
 			} else {
+				for(int j = 1; j <= 10; j++) {
+					p.setSkillQuota(Skill.skillFromId(j), 5);
+				}
 				p.setAI(new AIRunner(ai_class));
 			}
 			
