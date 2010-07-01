@@ -1,5 +1,5 @@
 public class Tool {
-	final static double infinity = 100000;
+	public final static int infinity = 100000000;
 	
 	public static double distance(GameObject a, GameObject b) {
 		return distance(a.getLocX(), a.getLocY(), b.getLocX(), b.getLocY());
@@ -9,7 +9,11 @@ public class Tool {
 		return Math.sqrt(dx*dx + dy*dy);
 	}
 	
-	public static double WhenHit( int x, int y, AIBullet bullet )
+	/**
+	 * count time which one bullet takes to hit the player of the coordinate
+	 * not exactly, because not depend on bullet's size
+	 */
+	public static int WhenHit( double x, double y, AIBullet bullet )
 	{
 		int rad1 = 25; // player's size
 		//int rad2 = 5; // bullet's size
@@ -28,7 +32,7 @@ public class Tool {
 		double string = Math.sqrt( rad1*rad1 - ptl*ptl );
 		double dis = Math.sqrt( (x-bullet.locX)*(x-bullet.locX)+(y-bullet.locY)*(y-bullet.locY));
 		double hit_dis = Math.sqrt(dis*dis-ptl*ptl)-string;
-		return hit_dis/speed;
+		return (int)(hit_dis/speed*1000);
 	}
 	
 	public static double getNextPositionX( int dir, double speed, double x_now, int time )
