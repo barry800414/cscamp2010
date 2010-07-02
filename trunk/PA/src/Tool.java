@@ -38,12 +38,12 @@ public class Tool {
 	public static double getNextPositionX( int dir, double speed, double x_now, int time )
 	{
 		if( dir == 0 ) return x_now;
-		return x_now+Math.cos((dir-1)*Math.PI)*speed*time;
+		return x_now+Math.cos((dir-1)*Math.PI/4)*speed*time;
 	}
 	
 	public static double getNextPositionY( int dir, double speed, double y_now, int time )
 	{
 		if( dir == 0 ) return y_now;
-		return y_now+Math.sin((dir-1)*Math.PI)*speed*time;
+		return y_now+Math.sin((dir-1)*Math.PI/4)*speed*time;
 	}
 }
