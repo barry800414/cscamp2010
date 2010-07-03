@@ -18,8 +18,8 @@ public abstract class AI {
 	
 	public final void resetInternalState() {
 		players.clear();
-		bullets = null;
-		skill_quota = null;
+		bullets = new AIBullet[0];
+		skill_quota = new int[Skill.SKILL_ID_MAX + 1];
 		
 		use_skill = false;
 		skill = null;
@@ -34,7 +34,6 @@ public abstract class AI {
 		myId = self_player.getId();
 		
 		// Set self data
-		skill_quota = new int[Skill.SKILL_ID_MAX + 1];
 		for(int i = Skill.SKILL_ID_MIN; i <= Skill.SKILL_ID_MAX; i++) {
 			skill_quota[i] = self_player.getSkillQuota(Skill.skillFromId(i));
 		}
