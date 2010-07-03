@@ -47,6 +47,7 @@ public class GraphicsEngine {
 		main_scr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		main_scr.add(game_scr);
 		// Make JFrame resize to fit the size of the components
+		main_scr.setResizable(false);
 		main_scr.pack();
 		main_scr.setVisible(true);
 		

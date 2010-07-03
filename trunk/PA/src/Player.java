@@ -15,6 +15,8 @@ public class Player extends GameObject {
 	private ArrayList<Effect>			effects;
 	private boolean[]					in_state;
 	private AIRunner					ai_runner;
+	private int							score;
+	private long						time_die;
 	
 	public Player(Game game) {
 		super(game);
@@ -27,6 +29,8 @@ public class Player extends GameObject {
 		effects = new ArrayList<Effect>();
 		in_state = new boolean[Effect.EFFECT_MAX_ID + 1];
 		ai_runner = null;
+		score = 0;
+		time_die = 0;
 		
 		updateStatus();
 	}
@@ -61,6 +65,28 @@ public class Player extends GameObject {
 	
 	public boolean isAlive() {
 		return alive;
+	}
+	
+	public synchronized void gainScore(int s) {
+		score += s;
+	}
+	
+	public int getScore() {
+		return score;
+	}
+	
+	public synchronized void resetScore() {
+		score = 0;
+	}
+	
+	public long getTimeDied() {
+		return time_die;
+	}
+	
+	public void notifyEndOfGame() {
+		if(isAlive()) {
+			time_die = game.getCurrentEventTime();
+		}
 	}
 	
 	public void useSkill(Skill skill, Player target) {
@@ -138,6 +164,7 @@ public class Player extends GameObject {
 			
 			if(life <= 0) {
 				alive = false;
+				time_die = game.getCurrentEventTime();
 			} else {
 				if(damage.life < 0) {
 					// Make us unvulnerable for a small time

@@ -16,6 +16,9 @@ public class Updater {
 	public static final long UPDATE_AI_PERIOD = 100;
 	/** This constant is not in use now, due to we have set the speed to pixel/sec. */
 	public static final double SPEED_CORRECTION = 1.0; // Always set to 1.0
+	/** The score player can get when a successful attack occurs. */
+	public static final int SCORE_HIT = 50;
+	public static final double SCORE_ALIVE_TIME_RATIO = 0.01;
 	
 	private Game game;
 	private GameInfo info;
@@ -54,6 +57,11 @@ public class Updater {
 		moveBullets();
 		detectBulletCollisions();
 		setBullet();
+		if(isEndOfGame()) {
+			game.notifyEndOfGame();
+			calculateAliveScore();
+			return;
+		}
 		
 		last_update = time_now;
 		enqueueNextUpdate();
@@ -93,7 +101,7 @@ public class Updater {
 		Random random = game.random;
 		
 		//make bullet
-		if( game.getTime()%100 == 0 )
+		if( game.getTime()%10 == 0 )
 		{
 			Bullet b = new Bullet(game);
 			//b.setLoc(info.getWidth() * random.nextDouble(), info.getHeight() * random.nextDouble());
@@ -190,14 +198,35 @@ public class Updater {
 	                    Math.pow(bullet[i].locY - player[j].locY,2));
 				if( distance <  bradius + (shield?shidius:pradius) )
 				{
-					bullet[i].applyDamage( Damage.newWithLife(-1) );
-					player[j].applyDamage( Damage.newWithLife(-1) );
-					System.out.println( "player("+j+")was hitted, hp:"+player[j].getLife() );
-					//ufo's dead is not complete
+					if(player[j].isAlive())
+					{
+						bullet[i].applyDamage( Damage.newWithLife(-1) );
+						player[j].applyDamage( Damage.newWithLife(-1) );
+						System.out.println( "player("+j+")was hitted, hp:"+player[j].getLife() );
+						if(bullet[i].getOwner() != null)
+						{
+							bullet[i].getOwner().gainScore(SCORE_HIT);
+							System.out.println("Player "+bullet[i].getOwner()+": +"+SCORE_HIT+" score.");
+						}
+					}
 				}
 			}
 		}
 
+	}
+	
+	private void calculateAliveScore() {
+		for(Player p : info.getAllPlayers()) {
+			p.gainScore((int)((double)p.getTimeDied() * SCORE_ALIVE_TIME_RATIO));
+		}
+	}
+	
+	private boolean isEndOfGame() {
+		int alive_ufo = 0;
+		for(Player p : info.getAllPlayers()) {
+			if(p.isAlive()) alive_ufo++;
+		}
+		return (alive_ufo <= 0);
 	}
 	
 	private void moveGameObject(GameObject obj) {
