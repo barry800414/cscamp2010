@@ -60,7 +60,7 @@ public class GameObject {
 			dirY = y / length;
 			
 			// Set this.direct to appropriate value
-			direct = 1 + (int)Math.round((getDirectRad() / Math.PI / 2) * 8);
+			direct = 1 + (int)Math.round((getDirectRad() / Math.PI / 2) * 8) % 8;
 		} else {
 			dirX = 0.0;
 			dirY = 0.0;
