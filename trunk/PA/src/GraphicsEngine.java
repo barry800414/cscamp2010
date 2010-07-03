@@ -2,9 +2,11 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.*;
 import java.awt.geom.*;
 import java.io.File;
+import java.text.AttributedString;
 
 import javax.imageio.ImageIO;
 	
@@ -97,6 +99,7 @@ public class GraphicsEngine {
 			// Draw all components
 			drawBullets(g2d);
 			drawPlayers(g2d);
+			drawStatus(g2d);
 			
 			// Cleanup
 			g.dispose();
@@ -137,6 +140,18 @@ public class GraphicsEngine {
 					g.drawImage(shield1,(int)(p.locX-SHIELD_SIZE/2) , (int)(p.locY-SHIELD_SIZE/2),null);
 				}
 			}
+		}
+	}
+	
+	private void drawStatus(Graphics2D g) {
+		for(int i=0;i<info.getAllPlayers().length;i++) {
+			Player p = info.getAllPlayers()[i];
+			String s ="score: " +  p.getScore();
+			AttributedString as = new AttributedString(s);
+			as.addAttribute(TextAttribute.FONT, new Font("Arial",Font.BOLD,24));
+			as.addAttribute(TextAttribute.FOREGROUND,Color.yellow);
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g.drawString(as.getIterator(), 20 + 200*i, 35);
 		}
 	}
 	
