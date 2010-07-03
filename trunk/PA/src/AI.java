@@ -16,6 +16,10 @@ public abstract class AI {
 	private Skill skill;
 	private int target;
 	
+	public AI() {
+		resetInternalState();
+	}
+	
 	public final void resetInternalState() {
 		players.clear();
 		bullets = new AIBullet[0];
