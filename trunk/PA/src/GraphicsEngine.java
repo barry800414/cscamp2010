@@ -18,6 +18,8 @@ public class GraphicsEngine {
 	public static final double BULLET_SIZE = 10.0;
 	public static final double SHIELD_SIZE = 74;
 	
+	public static final Font font1 = new Font("Arial",Font.BOLD,24);
+	
 	private Game game;
 	private GameInfo info;
 	
@@ -27,6 +29,8 @@ public class GraphicsEngine {
 	private BufferedImage[] ufo = new BufferedImage[9];
 	private BufferedImage bullet;
 	private BufferedImage shield1;
+	private BufferedImage background;
+	private BufferedImage freeze;
 	
 	private long last_draw;
 	
@@ -66,6 +70,8 @@ public class GraphicsEngine {
 			
 			bullet = ImageIO.read(getClass().getResourceAsStream("bullet.png"));
 			shield1 = ImageIO.read(getClass().getResourceAsStream("shieldA.png"));
+			background = ImageIO.read(getClass().getResourceAsStream("background.png"));
+			freeze = ImageIO.read(getClass().getResourceAsStream("freeze.png"));
 		}
 		catch(Exception e){
 			System.out.println(e);
@@ -95,11 +101,13 @@ public class GraphicsEngine {
 			
 			// Clean buffer
 			g2d.clearRect(0, 0, (int)info.getWidth(), (int)info.getHeight());
+			g2d.drawImage(background,0,0,null);
 			
 			// Draw all components
 			drawBullets(g2d);
 			drawPlayers(g2d);
 			drawStatus(g2d);
+			drawEffect(g2d);
 			
 			// Cleanup
 			g.dispose();
@@ -144,14 +152,24 @@ public class GraphicsEngine {
 	}
 	
 	private void drawStatus(Graphics2D g) {
-		for(int i=0;i<info.getAllPlayers().length;i++) {
-			Player p = info.getAllPlayers()[i];
+		int num = info.getAllPlayers().length;
+		for(int i=0;i<num;i++) {
+			Player p = info.getPlayer(i);
 			String s ="score: " +  p.getScore();
 			AttributedString as = new AttributedString(s);
-			as.addAttribute(TextAttribute.FONT, new Font("Arial",Font.BOLD,24));
+			as.addAttribute(TextAttribute.FONT,font1);
 			as.addAttribute(TextAttribute.FOREGROUND,Color.yellow);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g.drawString(as.getIterator(), 20 + 200*i, 35);
+		}
+	}
+	
+	private void drawEffect(Graphics2D g){
+		int num = info.getAllPlayers().length;
+		for(int i=0;i<num;i++){
+			if(info.getPlayer(i).hasState(Effect.EFFECT_FROZEN)){
+				g.drawImage(freeze,0,0,null);
+			}
 		}
 	}
 	
@@ -164,6 +182,8 @@ public class GraphicsEngine {
 			public void action() { ge.draw(); }
 		});
 	}
+
+	
 	
 	public JFrame getMainFrame() {
 		return main_scr;
