@@ -22,12 +22,16 @@ public class Game {
 	
 	private Event			curr_event;
 	
+	private boolean			game_end;
+	
 	/** Initializer */
 	public Game() {
 		info = new GameInfo();
 		queue = new GameQueue();
 		updater = new Updater(this);
 		gengine = new GraphicsEngine(this);
+		
+		game_end = false;
 	}
 	
 	public GameInfo getGameInfo() {
@@ -51,6 +55,9 @@ public class Game {
 		
 		// Drop into the main loop
 		mainLoop();
+		
+		// When ends
+		printGameStatistics();
 	}
 	
 	/** Get the time in millisecond after game starts */
@@ -74,6 +81,21 @@ public class Game {
 			return getTime();
 	}
 	
+	public void notifyEndOfGame() {
+		game_end = true;
+		for(Player p : info.getAllPlayers()) {
+			p.notifyEndOfGame();
+		}
+	}
+	
+	public void printGameStatistics() {
+		System.out.println("=== Game Statistic ===");
+		for(Player p : info.getAllPlayers()) {
+			System.out.println("Player "+p+": alive for "+p.getTimeDied()+" ms, score = "+p.getScore());
+		}
+		System.out.println("======================");
+	}
+	
 	/**
 	 * The main loop of the game:
 	 * get the next event in the queue and fire it at correct time.
@@ -81,7 +103,7 @@ public class Game {
 	public void mainLoop() {
 		long time_delta;
 		
-		while(true) {
+		while(!game_end) {
 			Event ev = queue.peekNext();
 			if(ev != null) {
 				time_delta = ev.getTime() - getTime();
