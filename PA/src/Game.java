@@ -86,6 +86,7 @@ public class Game {
 		for(Player p : info.getAllPlayers()) {
 			p.notifyEndOfGame();
 		}
+		printGameStatistics();
 	}
 	
 	public void printGameStatistics() {
@@ -109,7 +110,8 @@ public class Game {
 				time_delta = ev.getTime() - getTime();
 				if(time_delta <= 0) {
 					if(time_delta < -EVENT_MAX_DELAY) {
-						System.out.println("Game: QoS, event late: " + time_delta);
+						//DEBUG, PERFORMACE TUNING
+						//System.out.println("Game: QoS, event late: " + time_delta);
 					}
 					// Dequeue the event and fire it
 					curr_event = queue.getNext();
