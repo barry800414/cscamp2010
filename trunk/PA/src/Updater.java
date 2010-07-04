@@ -314,6 +314,10 @@ public class Updater {
 							// Record it and use it
 							skill_used_last_ai_update.put(p, skill);
 							p.useSkill(skill, target);
+							if(skill == Skill.ShieldA)
+								new AudioEffect("Bell.wav").start();
+							else if (skill == Skill.Froze)
+								new AudioEffect("Cold11.wav").start();
 						}
 					}
 				} // if has ai and finished
