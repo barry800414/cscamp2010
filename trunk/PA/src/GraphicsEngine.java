@@ -1,11 +1,8 @@
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.*;
-import java.awt.geom.*;
-import java.io.File;
 import java.text.AttributedString;
 
 import javax.imageio.ImageIO;

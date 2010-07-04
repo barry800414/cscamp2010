@@ -72,6 +72,6 @@ class AnimationCountdown extends Animation {
 		as.addAttribute(TextAttribute.FONT, font_msg);
 		as.addAttribute(TextAttribute.FOREGROUND, Color.red);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g.drawString(as.getIterator(), ((int)game.getGameInfo().FIELD_WIDTH - fm.stringWidth(s))/2, 230+38*index);
+		g.drawString(as.getIterator(), ((int)GameInfo.FIELD_WIDTH - fm.stringWidth(s))/2, 230+38*index);
 	}
 }
