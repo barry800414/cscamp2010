@@ -18,7 +18,8 @@ public class GraphicsEngine {
 	public static final double BULLET_SIZE = 10.0;
 	public static final double SHIELD_SIZE = 74;
 	
-	public static final Font font1 = new Font("Arial",Font.BOLD,24);
+	public static final Font font1 = new Font("Arial",Font.BOLD,22);
+	public static final Font font2 = new Font("Arial",Font.BOLD,18);
 	
 	private Game game;
 	private GameInfo info;
@@ -139,10 +140,15 @@ public class GraphicsEngine {
 	}
 	
 	private void drawPlayers(Graphics2D g) {
-		for(Player p : info.getAllPlayers()) {
+		int num = info.getAllPlayers().length;
+		Player p;
+		for(int i=0;i<num;i++) {
+			p = info.getPlayer(i);
 			if(p.isAlive()) {
 				g.drawImage(ufo[p.direct],(int)(p.locX-PLAYER_SIZE/2),(int)(p.locY-PLAYER_SIZE/2),null);
-				
+				AttributedString as = new AttributedString("" + (i+1));
+				as.addAttribute(TextAttribute.FONT, font2);
+				g.drawString(as.getIterator(),(int)(p.locX) - 5,(int)(p.locY) + 5);
 				// TODO: need to be change to apply Animation mechanism.
 				if(p.hasState(Effect.EFFECT_SHIELDA) || p.hasState(Effect.EFFECT_SHIELDB) || p.hasState(Effect.EFFECT_UNVULNERABLE)) {
 					g.drawImage(shield1,(int)(p.locX-SHIELD_SIZE/2) , (int)(p.locY-SHIELD_SIZE/2),null);
@@ -155,7 +161,7 @@ public class GraphicsEngine {
 		int num = info.getAllPlayers().length;
 		for(int i=0;i<num;i++) {
 			Player p = info.getPlayer(i);
-			String s ="score: " +  p.getScore();
+			String s = "Player " + (i+1) + " score: " +  p.getScore();
 			AttributedString as = new AttributedString(s);
 			as.addAttribute(TextAttribute.FONT,font1);
 			as.addAttribute(TextAttribute.FOREGROUND,Color.yellow);
