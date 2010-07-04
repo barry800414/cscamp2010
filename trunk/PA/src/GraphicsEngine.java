@@ -35,6 +35,7 @@ public class GraphicsEngine {
 	private long last_fps_update;
 	private long frames_drew;
 	private double fps;
+	private int current_target_fps = TARGET_FPS;
 	
 	public GraphicsEngine(Game game) {
 		this.game = game;
@@ -127,6 +128,11 @@ public class GraphicsEngine {
 		
 		// Generate next draw event
 		last_draw = time_now;
+		if(game.getTime() - last_draw > 1000/current_target_fps) {
+			current_target_fps-=2;
+		} else {
+			if(current_target_fps < TARGET_FPS) current_target_fps++;
+		}
 		enqueueNextDraw();
 	}
 	
@@ -182,6 +188,7 @@ public class GraphicsEngine {
 		for(int i=0;i<num;i++){
 			if(info.getPlayer(i).hasState(Effect.EFFECT_FROZEN)){
 				g.drawImage(freeze,0,0,null);
+				break;
 			}
 		}
 	}
@@ -194,7 +201,7 @@ public class GraphicsEngine {
 	
 	private void enqueueNextDraw() {
 		final GraphicsEngine ge = this;
-		final long time_next_draw = last_draw + 1000 / TARGET_FPS;
+		final long time_next_draw = last_draw + 1000 / current_target_fps;
 		
 		game.getGameQueue().addEvent(new Event() {
 			public long getTime() { return time_next_draw; }
