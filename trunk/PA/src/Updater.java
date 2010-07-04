@@ -57,9 +57,9 @@ public class Updater {
 		moveBullets();
 		detectBulletCollisions();
 		setBullet();
+		calculateAliveScore();
 		if(isEndOfGame()) {
 			game.notifyEndOfGame();
-			calculateAliveScore();
 			return;
 		}
 		
@@ -101,7 +101,7 @@ public class Updater {
 		Random random = game.random;
 		
 		//make bullet
-		if( game.getTime()%10 == 0 )
+		if( game.getCurrentEventTime()%50 <= 3 )
 		{
 			Bullet b = new Bullet(game);
 			//b.setLoc(info.getWidth() * random.nextDouble(), info.getHeight() * random.nextDouble());
@@ -202,11 +202,11 @@ public class Updater {
 					{
 						bullet[i].applyDamage( Damage.newWithLife(-1) );
 						player[j].applyDamage( Damage.newWithLife(-1) );
-						System.out.println( "player("+j+")was hitted, hp:"+player[j].getLife() );
+						//System.out.println( "player("+j+")was hitted, hp:"+player[j].getLife() );
 						if(bullet[i].getOwner() != null)
 						{
 							bullet[i].getOwner().gainScore(SCORE_HIT);
-							System.out.println("Player "+bullet[i].getOwner()+": +"+SCORE_HIT+" score.");
+							System.out.println("Player ["+bullet[i].getOwner()+"]: +"+SCORE_HIT+" score.");
 						}
 					}
 				}
@@ -217,7 +217,7 @@ public class Updater {
 	
 	private void calculateAliveScore() {
 		for(Player p : info.getAllPlayers()) {
-			p.gainScore((int)((double)p.getTimeDied() * SCORE_ALIVE_TIME_RATIO));
+			if(p.isAlive()) p.updateTimeScore();
 		}
 	}
 	

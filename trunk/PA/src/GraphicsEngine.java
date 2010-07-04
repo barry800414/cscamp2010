@@ -76,7 +76,6 @@ public class GraphicsEngine {
 		}
 		catch(Exception e){
 			System.out.println(e);
-			System.out.println("test!!!");
 		}
 		
 		draw();

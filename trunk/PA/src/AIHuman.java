@@ -66,7 +66,25 @@ public class AIHuman extends AI {
 		}
 		if(skill > -1) {
 			if(skill == 0) skill = 10;
-			useSkill(skill, myId);
+			int target = myId;
+			if(skill == Skill.CrossKill.getId() || skill == Skill.Teleport.getId() 
+					|| skill == Skill.ControlBullets.getId() || skill == Skill.Steal.getId() 
+					|| skill == Skill.Slowdown.getId()) {
+				target = findFirstEnemy();
+			}
+			useSkill(skill, target);
 		}
+	}
+	
+	public int findFirstEnemy() {
+		for(int i = 1; i <= getNumPlayers(); i++) {
+			if(getPlayer(i) != getPlayer(myId)) return i;
+		}
+		return myId;
+	}
+	
+	@Override
+	public String toString() {
+		return "AIHuman";
 	}
 }

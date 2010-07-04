@@ -127,5 +127,10 @@ public abstract class AI {
 			return 0;
 	}
 	
+	@Override
+	public String toString() {
+		return this.getClass().getName();
+	}
+	
 	public abstract void run();
 }
