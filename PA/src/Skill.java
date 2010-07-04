@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 
 public enum Skill {
 	Nothing(0, true) {
@@ -152,22 +155,45 @@ public enum Skill {
 		}
 	},
 	Froze(10, false) {
+		private List<AnimationCountdown> all_ac = new ArrayList<AnimationCountdown>();
 		public void use(Game game, Player src, Player target) {
-			long time_effect_start = game.getTime() + 3000;
-			
-			// Schedule events to apply frozen effect to all players except itself
-			GameQueue queue = game.getGameQueue();
-			GameInfo info = game.getGameInfo();
-			int sz = info.getNumPlayers();
-			
-			for(int i = 0; i < sz; i++) {
-				// Enqueue the corresponding effect event
-				Player p = info.getPlayer(i);
-				if(p != src)
-					queue.enqueueAddEffect(p, new EffectFrozen(game, p), time_effect_start);
+			// Check player is alive and not in frozen state
+			if(!src.isAlive() || src.hasState(Effect.EFFECT_FROZEN)) {
+				System.out.println("Player ["+src+"]: unable to use skill Frozen in the current state.");
+				return;
 			}
 			
-			info.addAnimation(new AnimationCountdown(game.getCurrentEventTime(), 3000, "Frozen"));
+			final long time_effect_start = game.getTime() + 3000;
+			final AnimationCountdown my_ac = new AnimationCountdown(game.getCurrentEventTime(), 3000, "Frozen by "+src);
+			
+			all_ac.add(my_ac);
+			
+			// Schedule events to apply frozen effect to all players except itself
+			final Game g = game;
+			final Player source = src;
+			
+			game.getGameQueue().addEvent(new Event() {
+				@Override
+				public void action() {
+					if(!source.isAlive() || source.hasState(Effect.EFFECT_FROZEN)) {
+						System.out.println("Player ["+source+"]: skill Frozen was interrupted.");
+						return;
+					}
+					all_ac.remove(my_ac);
+					for(AnimationCountdown ac : all_ac.toArray(new AnimationCountdown[0]))
+						ac.cancelMsg(1000, "Interrupted", g);
+					
+					for(Player p : g.getGameInfo().getAllPlayers()) {
+						if(p != source) p.addEffect(new EffectFrozen(g, p));
+					}
+				}
+				@Override
+				public long getTime() {
+					return time_effect_start;
+				}
+			});
+			
+			g.getGameInfo().addAnimation(my_ac);
 		}
 	};
 	
