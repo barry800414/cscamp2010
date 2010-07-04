@@ -108,6 +108,7 @@ public class GraphicsEngine {
 			drawPlayers(g2d);
 			drawStatus(g2d);
 			drawEffect(g2d);
+			drawAnimation(g2d);
 			
 			// Cleanup
 			g.dispose();
@@ -175,6 +176,12 @@ public class GraphicsEngine {
 			if(info.getPlayer(i).hasState(Effect.EFFECT_FROZEN)){
 				g.drawImage(freeze,0,0,null);
 			}
+		}
+	}
+	
+	private void drawAnimation(Graphics2D g) {
+		for(Animation a : info.getAllAnimations()) {
+			a.draw(g, game);
 		}
 	}
 	

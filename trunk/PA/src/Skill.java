@@ -166,6 +166,8 @@ public enum Skill {
 				if(p != src)
 					queue.enqueueAddEffect(p, new EffectFrozen(game, p), time_effect_start);
 			}
+			
+			info.addAnimation(new AnimationCountdown(game.getCurrentEventTime(), 3000, "Frozen"));
 		}
 	};
 	
