@@ -82,7 +82,7 @@ public class Game {
 	}
 	
 	public void notifyEndOfGame() {
-		game_end = true;
+		//game_end = true;
 		for(Player p : info.getAllPlayers()) {
 			p.notifyEndOfGame();
 		}
