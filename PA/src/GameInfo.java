@@ -62,6 +62,10 @@ public class GameInfo {
 		else
 			return null;
 	}
+
+	public Animation[] getAllAnimations() {
+		return animations.toArray(new Animation[0]);
+	}
 	
 	public void addPlayer(Player p) {
 		players.add(p);
