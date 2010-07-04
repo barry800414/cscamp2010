@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class SampleAI02 extends AI
+public class SampleAI03 extends AI
 {
 	Random random = new Random();
 	int became_1hp_time = -1; 
@@ -14,25 +14,27 @@ public class SampleAI02 extends AI
 		int dir_num = 0;
 		int next_dir[] = new int[10];
 		
-		int min_hit_num = Tool.infinity;
+		int max_hit_time = 0;
 		for( int dir = 0 ; dir <= 8 ; dir++ )
 		{
-			double x = Tool.getNextPositionX( dir, me.speed, me.locX, 15 );
-			double y = Tool.getNextPositionY( dir, me.speed, me.locY, 15 );
-			int hit_num = 0;
+			double x = Tool.getNextPositionX( dir, me.speed, me.locX, 10 );
+			double y = Tool.getNextPositionY( dir, me.speed, me.locY, 10 );
+			int hit_time = Tool.infinity;
 			for( int i = 1 ; i <= bullet_num ; i++ )
     		{
-    			if( Tool.distance( x, y, getBullet(i).locX, getBullet(i).locY ) < 30 )
-    				hit_num++;
+    			int tmp = Tool.WhenHit(x, y, getBullet(i));
+    			
+    			if( tmp < hit_time )
+    				hit_time = tmp;
     		}
-			if( hit_num == min_hit_num )
+			if( hit_time == max_hit_time )
 			{
 				next_dir[dir_num] = dir;
 				dir_num++;
 			}
-			if( hit_num < min_hit_num )
+			if( hit_time > max_hit_time )
 			{
-				min_hit_num = hit_num;
+				max_hit_time = hit_time;
 				next_dir[0] = dir;
 				dir_num = 1;
 			}
@@ -47,7 +49,5 @@ public class SampleAI02 extends AI
 			if( getTime() - became_1hp_time == 1000 )
 				useSkill( 1, myId );
 		}
-		
 	}
-	
 }
