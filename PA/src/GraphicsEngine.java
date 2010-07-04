@@ -161,12 +161,22 @@ public class GraphicsEngine {
 		int num = info.getAllPlayers().length;
 		for(int i=0;i<num;i++) {
 			Player p = info.getPlayer(i);
-			String s = (i+1) + " " + p.toString() +": " +  p.getScore();
-			AttributedString as = new AttributedString(s);
-			as.addAttribute(TextAttribute.FONT,font1);
-			as.addAttribute(TextAttribute.FOREGROUND,Color.yellow);
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.drawString(as.getIterator(), 10 + 200*i, 35);
+			{
+				String s = (i+1) + "  " + p.toString() +": " +  p.getScore();
+				AttributedString as = new AttributedString(s);
+				as.addAttribute(TextAttribute.FONT,font1);
+				as.addAttribute(TextAttribute.FOREGROUND,Color.yellow);
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g.drawString(as.getIterator(), 10 + 200*i, 35);
+			}
+			{
+				String s = "    " + p.getLife() + " / " + p.getScore();
+				AttributedString as = new AttributedString(s);
+				as.addAttribute(TextAttribute.FONT,font1);
+				as.addAttribute(TextAttribute.FOREGROUND,Color.red);
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g.drawString(as.getIterator(), 10 + 200*i, 60);
+			}
 		}
 	}
 	
