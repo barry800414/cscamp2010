@@ -18,7 +18,7 @@ public class GraphicsEngine {
 	public static final double BULLET_SIZE = 10.0;
 	public static final double SHIELD_SIZE = 74;
 	
-	public static final Font font1 = new Font("Arial",Font.BOLD,22);
+	public static final Font font1 = new Font("Arial",Font.BOLD,20);
 	public static final Font font2 = new Font("Arial",Font.BOLD,18);
 	
 	private Game game;
@@ -161,12 +161,12 @@ public class GraphicsEngine {
 		int num = info.getAllPlayers().length;
 		for(int i=0;i<num;i++) {
 			Player p = info.getPlayer(i);
-			String s = "Player " + (i+1) + " score: " +  p.getScore();
+			String s = (i+1) + " " + p.toString() +": " +  p.getScore();
 			AttributedString as = new AttributedString(s);
 			as.addAttribute(TextAttribute.FONT,font1);
 			as.addAttribute(TextAttribute.FOREGROUND,Color.yellow);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.drawString(as.getIterator(), 20 + 200*i, 35);
+			g.drawString(as.getIterator(), 10 + 200*i, 35);
 		}
 	}
 	
