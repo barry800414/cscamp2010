@@ -91,7 +91,7 @@ public class Game {
 	public void printGameStatistics() {
 		System.out.println("=== Game Statistic ===");
 		for(Player p : info.getAllPlayers()) {
-			System.out.println("Player "+p+": alive for "+p.getTimeDied()+" ms, score = "+p.getScore());
+			System.out.println("Player ["+p+"]: alive for "+p.getTimeDied()+" ms, score = "+p.getScore());
 		}
 		System.out.println("======================");
 	}

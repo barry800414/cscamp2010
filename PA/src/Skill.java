@@ -85,7 +85,7 @@ public enum Skill {
 			final double BULLET_SPEED = 100.0;
 			
 			GameInfo info = game.getGameInfo();
-			double x = src.getLocX(), y = src.getLocY();
+			double x = target.getLocX(), y = target.getLocY();
 			double w = info.getWidth(), h = info.getHeight();
 			
 			// Generates bullets from the far side

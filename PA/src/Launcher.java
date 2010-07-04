@@ -1,12 +1,32 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Scanner;
+
 
 /**
  * This class does the initialization of AIs and other game parts.
  */
 public class Launcher {
+	public static void printHelp() {
+		System.out.println("Launcher [-f skill_quota_file] AI1 [AI2] [AI3] [AI4]");
+	}
+	
 	public static void main(String[] args) {
 		if(args.length == 0) {
-			System.out.println("Launcher AI1 [AI2] [AI3] [AI4]");
+			printHelp();
 			return;
+		}
+
+		int i = 0;
+		// Load skill quota if needed
+		Map<String, int[]> skills = new Hashtable<String, int[]>();;
+		if(args[i].equals("-f")) {
+			skills = loadSkills(args[i+1]);
+			i += 2;
 		}
 		
 		// Create game instance
@@ -14,7 +34,7 @@ public class Launcher {
 		GameInfo info = g.getGameInfo();
 		
 		// Load players
-		for(int i = 0; i < args.length; i++) {
+		for(; i < args.length; i++) {
 			String ai_class = args[i];
 			
 			Player p = new Player(g);
@@ -29,14 +49,19 @@ public class Launcher {
 				
 				p.setAI(new AIHuman(g));
 			} else {
-				for(int j = 1; j <= 10; j++) {
-					p.setSkillQuota(Skill.skillFromId(j), 5);
+				int[] skill_quota = skills.get(ai_class);
+				if(skill_quota != null) {
+					for(int id = 0; id < skill_quota.length; id++) {
+						p.setSkillQuota(Skill.skillFromId(Skill.SKILL_ID_MIN + id), skill_quota[id]);
+					}
 				}
+				
 				p.setAI(new AIRunner(ai_class));
 			}
 			
 			g.getGameInfo().addPlayer(p);
 		}
+		
 		/*
 		// Init bullets
 		int BULLETS = 50;
@@ -49,7 +74,36 @@ public class Launcher {
 			g.getGameInfo().addBullet(b[i]);
 		}
 		*/
+		
+		if(g.getGameInfo().getNumPlayers() == 0) {
+			printHelp();
+			return;
+		}
+		
 		// Starts the game
 		g.startGame();
+	}
+	
+	public static Map<String, int[]> loadSkills(String fn) {
+		final int skill_count = 10;
+		
+		Map<String, int[]> skills = new Hashtable<String, int[]>();
+		
+		try {
+			Scanner input = new Scanner(new FileInputStream(new File(fn)));
+			
+			while(input.hasNext()) {
+				String cls = input.next();
+				int[] count = new int[skill_count];
+				for(int i = 0; i < skill_count; i++)
+					count[i] = input.nextInt();
+				skills.put(cls, count);
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("Cannot load skill config file: "+fn);
+			e.printStackTrace();
+		}
+		
+		return skills;
 	}
 }

@@ -13,9 +13,10 @@ public class Player extends GameObject {
 	private boolean						alive;
 	private Hashtable<Skill, Integer>	skill_quota;
 	private ArrayList<Effect>			effects;
-	private boolean[]					in_state;
+	private int[]						in_state;
 	private AIRunner					ai_runner;
-	private int							score;
+	private int							time_score;
+	private int							extra_score;
 	private long						time_die;
 	
 	public Player(Game game) {
@@ -27,9 +28,10 @@ public class Player extends GameObject {
 		alive = true;
 		skill_quota = new Hashtable<Skill, Integer>();
 		effects = new ArrayList<Effect>();
-		in_state = new boolean[Effect.EFFECT_MAX_ID + 1];
+		in_state = new int[Effect.EFFECT_MAX_ID + 1];
 		ai_runner = null;
-		score = 0;
+		time_score = 0;
+		extra_score = 0;
 		time_die = 0;
 		
 		updateStatus();
@@ -68,15 +70,21 @@ public class Player extends GameObject {
 	}
 	
 	public synchronized void gainScore(int s) {
-		score += s;
+		extra_score += s;
+	}
+	
+	public void updateTimeScore() {
+		if(isAlive())
+			time_score = (int)( (double)game.getCurrentEventTime() * Updater.SCORE_ALIVE_TIME_RATIO );
 	}
 	
 	public int getScore() {
-		return score;
+		return extra_score + time_score;
 	}
 	
 	public synchronized void resetScore() {
-		score = 0;
+		extra_score = 0;
+		time_score = 0;
 	}
 	
 	public long getTimeDied() {
@@ -100,7 +108,7 @@ public class Player extends GameObject {
 				
 				System.out.println("Player [" + this + "] used skill " + skill + " on player [" + target + "].");
 			} else {
-				System.out.println("Player: " + this + " don't have skill " + skill + ".");
+				System.out.println("Player [" + this + "]: don't have skill " + skill + ".");
 			}
 		}
 	}
@@ -128,16 +136,16 @@ public class Player extends GameObject {
 		return skills.toArray(new Skill[0]);
 	}
 	
-	public void addEffect(Effect effect) {
+	public synchronized void addEffect(Effect effect) {
 		System.out.println("Player [" + this + "]: effect [" + effect + "] onSet");
 		effects.add(effect);
 		effect.onSet();
-		in_state[effect.getId()] = true;
+		in_state[effect.getId()]++;
 	}
 	
-	public void removeEffect(Effect effect) {
+	public synchronized void removeEffect(Effect effect) {
 		System.out.println("Player [" + this + "]: effect [" + effect + "] onRemove");
-		in_state[effect.getId()] = false;
+		in_state[effect.getId()]--;
 		effect.onRemove();
 		effects.remove(effect);
 	}
@@ -148,7 +156,7 @@ public class Player extends GameObject {
 	
 	public boolean hasState(int id) {
 		if(id >= 0 && id <= Effect.EFFECT_MAX_ID)
-			return in_state[id];
+			return (in_state[id] > 0);
 		else
 			return false;
 	}
@@ -161,6 +169,10 @@ public class Player extends GameObject {
 			}
 			
 			life += damage.life;
+			
+			if(damage.life < 0) {
+				System.out.println("Player ["+this+"]: damaged, life left: "+life);
+			}
 			
 			if(life <= 0) {
 				alive = false;
@@ -218,5 +230,12 @@ public class Player extends GameObject {
 			ai_runner.stop();
 			ai_runner = null;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		if(ai_runner.getAIInstance() != null)
+			return ai_runner.getAIInstance().toString();
+		return this.getClass().getName();
 	}
 }

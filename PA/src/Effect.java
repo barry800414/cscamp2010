@@ -42,6 +42,11 @@ public class Effect {
 	 * letting effect to have a chance to remove damage.
 	 */
 	public void onDamage(Damage d) {}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getName();
+	}
 }
 
 /**
