@@ -25,7 +25,7 @@ public class AudioEffect extends Thread {
     public void run() {
         //File soundFile = new File( file_name );
         try {
-        	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(file_name));
+        	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResourceAsStream(file_name));
         	if(circle_play){
         		while(true)
         			playAudioStream( audioInputStream );
