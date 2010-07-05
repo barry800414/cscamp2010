@@ -6,7 +6,7 @@ public final class AIPlayer {
 	public double locX, locY, speed, speedX, speedY;
 	public int life, player_skill;
 	
-	public boolean hasState(int state) {
+	public final boolean hasState(int state) {
 		return (state >= 1 && state <= Effect.EFFECT_MAX_ID) ? player_in_state[state] : false;
 	}
 	
@@ -14,7 +14,7 @@ public final class AIPlayer {
 	 * For security reason, onPlayerSkillUsage message will be distributed to us,
 	 * if it represents our player then we set the player_skill field.
 	 */
-	public void onPlayerSkillUsage(Player p, Skill skill) {
+	public final void onPlayerSkillUsage(Player p, Skill skill) {
 		if(p == player) player_skill = skill.getId();
 	}
 	
