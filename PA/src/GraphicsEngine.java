@@ -166,7 +166,7 @@ public class GraphicsEngine {
 		for(int i=0;i<num;i++) {
 			Player p = info.getPlayer(i);
 			{
-				String s = (i+1) + "  " + p.toString() +": " +  p.getScore();
+				String s = (i+1) + "  " + p.toString();
 				AttributedString as = new AttributedString(s);
 				as.addAttribute(TextAttribute.FONT,font1);
 				as.addAttribute(TextAttribute.FOREGROUND,Color.yellow);
