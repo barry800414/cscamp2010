@@ -68,11 +68,12 @@ public class GraphicsEngine {
 			ufo[8] = ImageIO.read(getClass().getResourceAsStream("ufo_downright.png"));
 			
 			bullet = ImageIO.read(getClass().getResourceAsStream("bullet.png"));
-			shield1 = ImageIO.read(getClass().getResourceAsStream("shieldA.png"));
+			shield1 = ImageIO.read(getClass().getResourceAsStream("ShieldA.png"));
 			background = ImageIO.read(getClass().getResourceAsStream("background.png"));
 			freeze = ImageIO.read(getClass().getResourceAsStream("freeze.png"));
 		}
 		catch(Exception e){
+			System.out.println("Cannot load some images.");
 			System.out.println(e);
 		}
 		
