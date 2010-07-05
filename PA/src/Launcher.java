@@ -21,6 +21,7 @@ public class Launcher {
 		}
 
 		int i = 0;
+		int pid = 0;
 		// Load skill quota if needed
 		Map<String, int[]> skills = new Hashtable<String, int[]>();;
 		if(args[i].equals("-f")) {
@@ -34,12 +35,13 @@ public class Launcher {
 		
 		// Load players
 		for(; i < args.length; i++) {
+			pid++;
 			String ai_class = args[i];
 			
 			Player p = new Player(g);
 			p.setLoc(g.random.nextDouble() * info.getWidth(), g.random.nextDouble() * info.getHeight());
-			p.setId(i + 1);
-			p.setName("Player " + (i + 1) + ": " + ai_class);
+			p.setId(pid);
+			p.setName("Player " + (pid) + ": " + ai_class);
 			
 			if(ai_class.equals("AIHuman")) {
 				for(int j = 1; j <= 10; j++) {
