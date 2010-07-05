@@ -39,21 +39,21 @@ public class AIRunner {
 	}
 	
 	/** Returns true if the AI had finished running */
-	public boolean isFinished() {
+	public synchronized boolean isFinished() {
 		return finished;
 	}
 	
 	/** The thread will use this method to report its state */
-	public void setFinished(boolean finished) {
+	public synchronized void setFinished(boolean finished) {
 		this.finished = finished;
 	}
 
 	/** Stop AI thread if exist any */
 	public void stop() {
-		if(!finished) {
+		if(!isFinished()) {
 			try {
 				ai_thread.interrupt();
-				finished = true;
+				setFinished(true);
 			} catch(SecurityException e) {
 				System.out.println("AI Class: " + classname + " access denied and cannot stop.");
 			}
@@ -65,23 +65,22 @@ public class AIRunner {
 	 * NOTE: ONLY when no existing thread running.
 	 */
 	public void run() {
-		if(finished) {
+		if(isFinished()) {
 			try {
 				final AIRunner that = this;
+				that.setFinished(false);
 				ai_thread = new Thread(new Runnable() {
-					public AIRunner parent = that;
 					public AI ai = that.getAIInstance();
 					public void run() {
-						parent.setFinished(false);
 						ai.run();
-						parent.setFinished(true);
+						that.setFinished(true);
 					}
 				});
 				ai_thread.start();
 			} catch(IllegalThreadStateException e) {
 				System.out.println("AI Class: " + classname);
 				e.printStackTrace();
-				finished = true;
+				setFinished(true);
 			}
 		}
 	}
