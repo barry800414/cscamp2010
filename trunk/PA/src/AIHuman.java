@@ -82,9 +82,4 @@ public class AIHuman extends AI {
 		}
 		return myId;
 	}
-	
-	@Override
-	public String toString() {
-		return "AIHuman";
-	}
 }
