@@ -186,6 +186,7 @@ public class Updater {
 			for( int j = 0 ; j < player.length ; j++ )
 			{
 				if(!player[j].isAlive()) continue;
+				if(bullet[i].getOwner() == player[j]) continue;
 				
 				//detect shield
 				Effect[] effect = player[j].getAllEffects();
