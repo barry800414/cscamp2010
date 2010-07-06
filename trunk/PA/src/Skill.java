@@ -52,11 +52,11 @@ public enum Skill {
 		public void use(Game game, Player src, Player target) {
 			if(target == null) target = src;
 			
-			final double MAX_MISS = 20.0;
+			final double MAX_MISS = 30.0;
 			
 			// Set the direction of near bullets to target
 			GameInfo info = game.getGameInfo();
-			GameObject[] near_objs = info.getNearObjects(src, 50.0);
+			GameObject[] near_objs = info.getNearObjects(src, 300.0);
 			for(GameObject obj : near_objs) {
 				if(obj instanceof Bullet) {
 					Bullet bullet = (Bullet)obj;
