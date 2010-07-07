@@ -26,10 +26,11 @@ public class Bullet extends GameObject {
 	}
 	
 	@Override
-	public void applyDamage(Damage d) {
+	public Damage applyDamage(Damage d) {
 		if(d.life < 0) {
 			game.getGameInfo().removeBullet(this);
 		}
+		return d;
 	}
 	
 	/** Set the bullet to target a game object with little miss (change direction once). */

@@ -24,13 +24,16 @@ public class Tool {
 		X = bullet.LocX + t*bullet.speedX;
 		Y = bullet.LocY + t*bullet.speedY;
 		*/
+		double dx = x-bullet.locX, dy = y-bullet.locY;
+		
 		double speed = Math.sqrt( bullet.speedX*bullet.speedX + bullet.speedY*bullet.speedY );
-		double ptl = Math.abs( ( bullet.speedY*( x-bullet.locX )-bullet.speedX*( y-bullet.locY ) )/speed );
+		double ptl = Math.abs( ( bullet.speedY*( dx )-bullet.speedX*( dy ) )/speed );
 		
 		if( ptl > rad1 ) return infinity; //never hit
+		if(dx*bullet.speedX+dy*bullet.speedY<0) return Tool.infinity; // never hit if leaving
 		
 		double string = Math.sqrt( rad1*rad1 - ptl*ptl );
-		double dis = Math.sqrt( (x-bullet.locX)*(x-bullet.locX)+(y-bullet.locY)*(y-bullet.locY));
+		double dis = Math.sqrt( (dx)*(dx)+(dy)*(dy));
 		double hit_dis = Math.sqrt(dis*dis-ptl*ptl)-string;
 		return (int)(hit_dis/speed*1000);
 	}
@@ -38,12 +41,12 @@ public class Tool {
 	public static double getNextPositionX( int dir, double speed, double x_now, int time )
 	{
 		if( dir == 0 ) return x_now;
-		return x_now+Math.cos((dir-1)*Math.PI/4)*speed*time;
+		return x_now+Math.cos((dir-1)*Math.PI/4)*speed*time/1000;
 	}
 	
 	public static double getNextPositionY( int dir, double speed, double y_now, int time )
 	{
 		if( dir == 0 ) return y_now;
-		return y_now+Math.sin((dir-1)*Math.PI/4)*speed*time;
+		return y_now+Math.sin((dir-1)*Math.PI/4)*speed*time/1000;
 	}
 }
