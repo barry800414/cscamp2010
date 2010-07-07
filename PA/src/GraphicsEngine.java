@@ -131,6 +131,7 @@ public class GraphicsEngine {
 		last_draw = time_now;
 		if(game.getTime() - last_draw > 1000/current_target_fps) {
 			current_target_fps-=2;
+			if(current_target_fps < 1) current_target_fps = 1;
 		} else {
 			if(current_target_fps < TARGET_FPS) current_target_fps++;
 		}
