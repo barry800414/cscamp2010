@@ -26,6 +26,8 @@ public class Updater {
 	private long last_update;
 	private long since_last_update;
 	
+	private int update_count;
+	
 	private Hashtable<Player, Skill> skill_used_last_ai_update;
 	
 	public Updater(Game game) {
@@ -63,6 +65,7 @@ public class Updater {
 			return;
 		}
 		
+		update_count++;
 		last_update = time_now;
 		enqueueNextUpdate();
 	}
@@ -101,7 +104,7 @@ public class Updater {
 		Random random = game.random;
 		
 		//make bullet
-		if( game.getCurrentEventTime()%50 <= 3 )
+		if( update_count%40 == 0 )
 		{
 			Bullet b = new Bullet(game);
 			//b.setLoc(info.getWidth() * random.nextDouble(), info.getHeight() * random.nextDouble());
