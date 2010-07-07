@@ -86,7 +86,8 @@ public class GameObject {
 		speed = v;
 	}
 	
-	public void applyDamage(Damage d) {
+	public Damage applyDamage(Damage d) {
+		return Damage.newWithLife(0);
 	}
 	
 	/** Test if it is near another object, range is a square. */

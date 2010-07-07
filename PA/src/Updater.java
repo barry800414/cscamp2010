@@ -17,7 +17,7 @@ public class Updater {
 	/** This constant is not in use now, due to we have set the speed to pixel/sec. */
 	public static final double SPEED_CORRECTION = 1.0; // Always set to 1.0
 	/** The score player can get when a successful attack occurs. */
-	public static final int SCORE_HIT = 50;
+	public static final int SCORE_HIT = 80;
 	public static final double SCORE_ALIVE_TIME_RATIO = 0.01;
 	
 	private Game game;
@@ -118,6 +118,7 @@ public class Updater {
 			if( tmp == 3 )
 				b.setLoc(info.getWidth() * random.nextDouble(), h+BULLET_SPACING);
 			b.setDir(random.nextDouble() - 0.5, random.nextDouble() - 0.5);
+			b.setOwner(null);
 			info.addBullet(b);
 		}
 		
@@ -205,9 +206,9 @@ public class Updater {
 					if(player[j].isAlive())
 					{
 						bullet[i].applyDamage( Damage.newWithLife(-1) );
-						player[j].applyDamage( Damage.newWithLife(-1) );
+						Damage real_damage = player[j].applyDamage( Damage.newWithLife(-1) );
 						//System.out.println( "player("+j+")was hitted, hp:"+player[j].getLife() );
-						if(bullet[i].getOwner() != null)
+						if(bullet[i].getOwner() != null && real_damage.life < 0)
 						{
 							bullet[i].getOwner().gainScore(SCORE_HIT);
 							System.out.println("Player ["+bullet[i].getOwner()+"]: +"+SCORE_HIT+" score.");

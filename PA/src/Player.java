@@ -162,7 +162,7 @@ public class Player extends GameObject {
 	}
 	
 	@Override
-	public void applyDamage(Damage damage) {
+	public Damage applyDamage(Damage damage) {
 		if(alive) {
 			for(Effect eff : getAllEffects()) {
 				eff.onDamage(damage);
@@ -183,6 +183,10 @@ public class Player extends GameObject {
 					addEffect(new EffectUnvulnerable(game, this));
 				}
 			}
+			
+			return damage;
+		} else {
+			return Damage.newWithLife(0);
 		}
 	}
 	
