@@ -15,7 +15,7 @@ public class Tool {
 	 */
 	public static int WhenHit( double x, double y, AIBullet bullet )
 	{
-		int rad1 = 25; // player's size
+		int rad1 = (int)GraphicsEngine.PLAYER_SIZE/2; // player's size
 		//int rad2 = 5; // bullet's size
 		
 		/**count point to line's distance*/
@@ -48,5 +48,13 @@ public class Tool {
 	{
 		if( dir == 0 ) return y_now;
 		return y_now+Math.sin((dir-1)*Math.PI/4)*speed*time/1000;
+	}
+	
+	public static boolean IsUfoInScreen( double x, double y )
+	{
+		return (x >= GraphicsEngine.PLAYER_SIZE/2
+				&& x <= GameInfo.FIELD_WIDTH-GraphicsEngine.PLAYER_SIZE/2
+				&& y >= GraphicsEngine.PLAYER_SIZE/2
+				&& y <= GameInfo.FIELD_HEIGHT-GraphicsEngine.PLAYER_SIZE/2);
 	}
 }
