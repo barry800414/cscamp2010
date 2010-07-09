@@ -129,6 +129,7 @@ public class Updater {
 					bullet[i].getLocY() < -BULLET_SPACING || bullet[i].getLocY() > h+BULLET_SPACING  )
 			{
 				bullet[i].setDirection( player[random.nextInt(player.length)] , 200+random.nextInt(300) );
+				bullet[i].setOwner(null);
 			}
 		}
 	}
