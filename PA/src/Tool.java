@@ -19,9 +19,6 @@ public class Tool {
 		//int rad2 = 5; // bullet's size
 		
 		/**count point to line's distance*/
-		y = -y;
-		bullet.locY = -bullet.locY;
-		bullet.speedY = -bullet.speedY;
 		
 		double dx = x-bullet.locX, dy = y-bullet.locY;
 		
@@ -36,10 +33,6 @@ public class Tool {
 		
 		double hit_dis = Math.sqrt( s2 - ptl*ptl ) - Math.sqrt( rad1*rad1 - ptl*ptl );
 		
-		y = -y;
-		bullet.locY = -bullet.locY;
-		bullet.speedY = -bullet.speedY;
-		
 		return (int)(hit_dis/speed*1000);
 	}
 	
@@ -52,10 +45,6 @@ public class Tool {
 		//int rad2 = 5; // bullet's size
 		
 		/**count point to line's distance*/
-		p.locY = -p.locY;
-		p.speedY = -p.speedY;
-		b.locY = -b.locY;
-		b.speedY = -b.speedY;
 		
 		double vx = b.speedX-p.speedX, vy = b.speedY-p.speedY;
 		double dx = p.locX-b.locX, dy = p.locY-b.locY;
@@ -70,11 +59,6 @@ public class Tool {
 		if(dx*vx+dy*vy<0) return Tool.infinity; // never hit if leaving
 		
 		double hit_dis = Math.sqrt( s2 - ptl*ptl ) - Math.sqrt( rad1*rad1 - ptl*ptl );
-
-		p.locY = -p.locY;
-		p.speedY = -p.speedY;
-		b.locY = -b.locY;
-		b.speedY = -b.speedY;
 		
 		return (int)(hit_dis/speed*1000);
 	}
