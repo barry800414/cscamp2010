@@ -24,6 +24,8 @@ public class Game {
 	
 	private boolean			game_end;
 	
+	private boolean			debug;
+	
 	/** Initializer */
 	public Game() {
 		info = new GameInfo();
@@ -32,6 +34,8 @@ public class Game {
 		gengine = new GraphicsEngine(this);
 		
 		game_end = false;
+		
+		debug = false;
 	}
 	
 	public GameInfo getGameInfo() {
@@ -44,6 +48,14 @@ public class Game {
 	
 	public GraphicsEngine getGraphicsEngine() {
 		return gengine;
+	}
+	
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
+	
+	public boolean isDebug() {
+		return debug;
 	}
 	
 	/** This method does the init of all components, and run the main loop. */

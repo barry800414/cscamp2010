@@ -15,26 +15,67 @@ public class Tool {
 	 */
 	public static int WhenHit( double x, double y, AIBullet bullet )
 	{
-		int rad1 = (int)GraphicsEngine.PLAYER_SIZE/2; // player's size
+		double rad1 = GraphicsEngine.PLAYER_SIZE/2+GraphicsEngine.BULLET_SIZE/2; // player's size
 		//int rad2 = 5; // bullet's size
 		
 		/**count point to line's distance*/
-		/*
-		aX+bY = 0
-		X = bullet.LocX + t*bullet.speedX;
-		Y = bullet.LocY + t*bullet.speedY;
-		*/
+		y = -y;
+		bullet.locY = -bullet.locY;
+		bullet.speedY = -bullet.speedY;
+		
 		double dx = x-bullet.locX, dy = y-bullet.locY;
 		
-		double speed = Math.sqrt( bullet.speedX*bullet.speedX + bullet.speedY*bullet.speedY );
+		double speed = bullet.speed;
 		double ptl = Math.abs( ( bullet.speedY*( dx )-bullet.speedX*( dy ) )/speed );
 		
 		if( ptl > rad1 ) return infinity; //never hit
+		
+		double s2 = dx*dx+dy*dy;
+		if(s2 < rad1*rad1) return 0; // already hit
 		if(dx*bullet.speedX+dy*bullet.speedY<0) return Tool.infinity; // never hit if leaving
 		
-		double string = Math.sqrt( rad1*rad1 - ptl*ptl );
-		double dis = Math.sqrt( (dx)*(dx)+(dy)*(dy));
-		double hit_dis = Math.sqrt(dis*dis-ptl*ptl)-string;
+		double hit_dis = Math.sqrt( s2 - ptl*ptl ) - Math.sqrt( rad1*rad1 - ptl*ptl );
+		
+		y = -y;
+		bullet.locY = -bullet.locY;
+		bullet.speedY = -bullet.speedY;
+		
+		return (int)(hit_dis/speed*1000);
+	}
+	
+	/**
+	 * enhanced version of old WhenHit, with the consideration of the player's velocity. 
+	 */
+	public static int WhenHit( AIPlayer p, AIBullet b )
+	{
+		double rad1 = GraphicsEngine.PLAYER_SIZE/2+GraphicsEngine.BULLET_SIZE/2; // player's size
+		//int rad2 = 5; // bullet's size
+		
+		/**count point to line's distance*/
+		p.locY = -p.locY;
+		p.speedY = -p.speedY;
+		b.locY = -b.locY;
+		b.speedY = -b.speedY;
+		
+		double vx = b.speedX-p.speedX, vy = b.speedY-p.speedY;
+		double dx = p.locX-b.locX, dy = p.locY-b.locY;
+		
+		double speed = Math.sqrt(vx*vx+vy*vy);
+		double ptl = Math.abs( ( vy*( dx )-vx*( dy ) )/speed );
+		
+		if( ptl > rad1 ) return infinity; //never hit
+		
+		double s2 = dx*dx+dy*dy;
+		if(s2 < rad1*rad1) return 0; // already hit
+		if(dx*vx+dy*vy<0) return Tool.infinity; // never hit if leaving
+		
+		double hit_dis = Math.sqrt( s2 - ptl*ptl ) - Math.sqrt( rad1*rad1 - ptl*ptl );
+
+		p.locY = -p.locY;
+		p.speedY = -p.speedY;
+		b.locY = -b.locY;
+		b.speedY = -b.speedY;
+		
 		return (int)(hit_dis/speed*1000);
 	}
 	
@@ -47,7 +88,7 @@ public class Tool {
 	public static double getNextPositionY( int dir, double speed, double y_now, int time )
 	{
 		if( dir == 0 ) return y_now;
-		return y_now+Math.sin((dir-1)*Math.PI/4)*speed*time/1000;
+		return y_now-Math.sin((dir-1)*Math.PI/4)*speed*time/1000;
 	}
 	
 	public static boolean IsUfoInScreen( double x, double y )

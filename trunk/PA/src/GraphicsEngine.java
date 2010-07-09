@@ -17,6 +17,7 @@ public class GraphicsEngine {
 	
 	public static final Font font1 = new Font("Arial",Font.BOLD,20);
 	public static final Font font2 = new Font("Arial",Font.BOLD,18);
+	public static final Font font3 = new Font("Arial",Font.PLAIN,11);
 	
 	private Game game;
 	private GameInfo info;
@@ -108,6 +109,9 @@ public class GraphicsEngine {
 			drawStatus(g2d);
 			drawEffect(g2d);
 			drawAnimation(g2d);
+			if(game.isDebug()) {
+				drawBulletsSpeed(g2d);
+			}
 			
 			// Cleanup
 			g.dispose();
@@ -198,6 +202,38 @@ public class GraphicsEngine {
 	private void drawAnimation(Graphics2D g) {
 		for(Animation a : info.getAllAnimations()) {
 			a.draw(g, game);
+		}
+	}
+	
+	private void drawBulletsSpeed(Graphics2D g) {
+		double vlen = 20;
+		for(Bullet b : info.getAllBullets()) {
+			// Line
+			g.setColor(Color.RED);
+			g.setStroke(new BasicStroke(3));
+			g.drawLine((int)b.locX, (int)b.locY, (int)(b.locX+b.dirX*vlen), (int)(b.locY+b.dirY*vlen));
+			
+			// Hitting?
+			boolean show = false;
+			String s = String.format("(%.0f,%.0f)", b.locX, b.locY);
+			
+			// Check for all players
+			for(Player p : info.getAllPlayers()) {
+				if(!p.isAlive()) continue;
+				double hit = Tool.WhenHit(new AIPlayer(p), new AIBullet(b));
+				if(hit <= 3000) {
+					s += String.format(", hitting %s in %.1f s", p.toString(), hit/1000.0);
+					show = true;
+				}
+			}
+			
+			if(show) {
+				AttributedString as = new AttributedString(s);
+				as.addAttribute(TextAttribute.FONT,font3);
+				as.addAttribute(TextAttribute.FOREGROUND,Color.CYAN);
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g.drawString(as.getIterator(), (int)b.locX+10, (int)b.locY+10);
+			}
 		}
 	}
 	
