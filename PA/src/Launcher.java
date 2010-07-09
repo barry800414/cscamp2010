@@ -19,9 +19,19 @@ public class Launcher {
 			printHelp();
 			return;
 		}
-
+		
 		int i = 0;
 		int pid = 0;
+		// Create game instance
+		Game g = new Game();
+		GameInfo info = g.getGameInfo();
+		
+		// Debug?
+		if(args[i].equals("--debug")) {
+			g.setDebug(true);
+			i++;
+		}
+		
 		// Load skill quota if needed
 		Map<String, int[]> skills = new Hashtable<String, int[]>();;
 		if(args[i].equals("-f")) {
@@ -29,9 +39,6 @@ public class Launcher {
 			i += 2;
 		}
 		
-		// Create game instance
-		Game g = new Game();
-		GameInfo info = g.getGameInfo();
 		
 		// Load players
 		for(; i < args.length; i++) {
