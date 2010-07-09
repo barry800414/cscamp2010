@@ -25,7 +25,7 @@ public final class AIPlayer {
 		life = player.getLife();
 		speed = player.getSpeed();
 		speedX = player.getDirX()*player.getSpeed();
-		speedY = player.getDirX()*player.getSpeed();
+		speedY = player.getDirY()*player.getSpeed();
 		
 		player_in_state = new boolean[Effect.EFFECT_MAX_ID + 1];
 		for(Effect eff : player.getAllEffects()) {

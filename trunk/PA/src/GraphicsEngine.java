@@ -2,6 +2,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.font.TextAttribute;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.*;
 import java.text.AttributedString;
 
@@ -207,6 +208,7 @@ public class GraphicsEngine {
 	
 	private void drawBulletsSpeed(Graphics2D g) {
 		double vlen = 20;
+		double prad = GraphicsEngine.PLAYER_SIZE/2;
 		for(Bullet b : info.getAllBullets()) {
 			// Line
 			g.setColor(Color.RED);
@@ -224,6 +226,14 @@ public class GraphicsEngine {
 				if(hit <= 3000) {
 					s += String.format(", hitting %s in %.1f s", p.toString(), hit/1000.0);
 					show = true;
+					
+					double px = p.locX+p.dirX*p.speed*hit/1000, py = p.locY+p.dirY*p.speed*hit/1000;
+					double bx = b.locX+b.dirX*b.speed*hit/1000, by = b.locY+b.dirY*b.speed*hit/1000;
+					g.setColor(Color.GREEN);
+					g.setStroke(new BasicStroke(1));
+					g.drawLine((int)p.locX, (int)p.locY, (int)px, (int)py);
+					g.draw(new Ellipse2D.Double(px-prad, py-prad, 2*prad, 2*prad));
+					g.drawLine((int)b.locX, (int)b.locY, (int)bx, (int)by);
 				}
 			}
 			
