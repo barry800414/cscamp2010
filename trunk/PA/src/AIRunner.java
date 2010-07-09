@@ -72,7 +72,9 @@ public class AIRunner {
 				ai_thread = new Thread(new Runnable() {
 					public AI ai = that.getAIInstance();
 					public void run() {
-						ai.run();
+						try {
+							ai.run();
+						} catch(Exception e) {}
 						that.setFinished(true);
 					}
 				});
